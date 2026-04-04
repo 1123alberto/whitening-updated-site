@@ -29,8 +29,13 @@ const CLINIC_HOURS = {
 
 // Add specific dates you want to block out entirely (Format: 'YYYY-MM-DD')
 const BLOCKED_DATES = [
-  // '2026-04-15',
-  // '2026-05-01'
+   '2026-04-16',
+   '2026-04-17',
+   '2026-04-18',
+   '2026-04-19',
+   '2026-04-20',
+   '2026-04-21',
+   '2026-05-01'
 ];
 // ----------------------
 
@@ -79,11 +84,12 @@ function doGet(e) {
   const endOfWorkDay = new Date(year, month - 1, day, hours.end, 0, 0);
   
   const now = new Date(); // To avoid booking slots in the past if checking today's date
+  const minSlotTime = new Date(now.getTime() + 6 * 60 * 60 * 1000); // 6-hour minimum buffer
 
   while (currentSlotTime < endOfWorkDay) {
     const slotEnd = new Date(currentSlotTime.getTime() + SERVICE_DURATION * 60000);
     
-    if (slotEnd <= endOfWorkDay && currentSlotTime > now) {
+    if (slotEnd <= endOfWorkDay && currentSlotTime > minSlotTime) {
       // Check if this slot overlaps with any busy period
       let isOverlapping = false;
       for (const busy of busyPeriods) {
@@ -129,6 +135,9 @@ function doPost(e) {
       const cal = getCalendar();
       cal.createEvent(title, startTime, endTime, { description: description });
       
+      // Schedule reminder email
+      scheduleReminderEmail(email, name, startTime);
+      
       return respondJSON({ success: true, message: "Appointment created." });
     }
     return respondJSON({ error: "Invalid action." });
@@ -141,6 +150,57 @@ function doPost(e) {
 function respondJSON(data) {
   return ContentService.createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+// Schedules a reminder email at 9:00 AM on the day of the appointment
+function scheduleReminderEmail(email, name, dateObj) {
+  const reminderTime = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), 9, 0, 0);
+  const now = new Date();
+  
+  if (reminderTime <= now) {
+    // If it's already past 9:00 AM, send immediately
+    sendReminderEmail(email, name);
+  } else {
+    // Schedule trigger
+    const trigger = ScriptApp.newTrigger('processReminderEmail')
+      .timeBased()
+      .at(reminderTime)
+      .create();
+      
+    // Save data using trigger ID
+    PropertiesService.getScriptProperties().setProperty(
+      'reminder_' + trigger.getUniqueId(),
+      JSON.stringify({email: email, name: name})
+    );
+  }
+}
+
+// Triggered worker function to send the email and clean up
+function processReminderEmail(e) {
+  const triggerId = e.triggerUid;
+  const props = PropertiesService.getScriptProperties();
+  const dataStr = props.getProperty('reminder_' + triggerId);
+  
+  if (dataStr) {
+    const data = JSON.parse(dataStr);
+    sendReminderEmail(data.email, data.name);
+    props.deleteProperty('reminder_' + triggerId);
+  }
+  
+  // Clean up the trigger so it doesn't clutter the project
+  const triggers = ScriptApp.getProjectTriggers();
+  for (let i = 0; i < triggers.length; i++) {
+    if (triggers[i].getUniqueId() === triggerId) {
+      ScriptApp.deleteTrigger(triggers[i]);
+      break;
+    }
+  }
+}
+
+function sendReminderEmail(email, name) {
+  const subject = "Υπενθύμιση Ραντεβού Λεύκανσης (i-smile)";
+  const body = "Γεια σας " + name + ",\n\nΣας υπενθυμίζουμε το σημερινό σας ραντεβού για λεύκανση δοντιών.\n\nΜε εκτίμηση,\nH Ομάδα του i-smile.";
+  MailApp.sendEmail(email, subject, body);
 }
 ```
 

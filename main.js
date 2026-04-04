@@ -138,6 +138,23 @@ let currentLang = 'el';
 
 // DOM Elements
 document.addEventListener("DOMContentLoaded", () => {
+    // 0. Mobile Menu Toggle
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (mobileMenuBtn && navLinks) {
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+        
+        // Close menu when a link is clicked
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+    }
+
     // 1. Language Toggle
     const langBtn = document.getElementById("lang-toggle");
     const elementsToTranslate = document.querySelectorAll("[data-i18n]");
@@ -268,8 +285,14 @@ function renderCalendar() {
         btn.className = 'date-btn';
         btn.textContent = date.getDate();
         
-        // Disable past dates and Sundays (0)
-        if (date < today || date.getDay() === 0) {
+        // Disable past dates, Sundays (0), and specific test blocked dates
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        const dateStr = `${y}-${m}-${d}`;
+        const blockedDates = ['2026-04-16', '2026-04-17', '2026-04-18', '2026-05-01'];
+
+        if (date < today || date.getDay() === 0 || blockedDates.includes(dateStr)) {
             btn.classList.add('disabled');
         } else {
             btn.onclick = () => selectDate(date);
@@ -326,9 +349,23 @@ async function fetchAndShowSlots(date) {
             const hourLimit = isWeekend ? 0 : 20; // 0 ensures no slots on weekends
             
             for(let h = 10; h < hourLimit; h++) {
+                if (h === 14) continue; // Leave time for lunch
                 if (h % 2 !== 0 && h !== 10) continue; // just generating some random slots
-                availableSlots.push(`${h}:00`);
-                if (h + 1 < hourLimit) availableSlots.push(`${h}:30`);
+                
+                const now = new Date();
+                const minTime = new Date(now.getTime() + 6 * 60 * 60 * 1000);
+                
+                const slotTime1 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, 0, 0);
+                if (slotTime1 > minTime) {
+                    availableSlots.push(`${h}:00`);
+                }
+                
+                if (h + 1 < hourLimit) {
+                    const slotTime2 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, 30, 0);
+                    if (slotTime2 > minTime) {
+                         availableSlots.push(`${h}:30`);
+                    }
+                }
             }
         } else {
             // Real fetch to Google Apps Script
