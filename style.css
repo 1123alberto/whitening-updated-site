@@ -632,6 +632,49 @@ ul {
     text-align: center;
 }
 
+.service-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.service-btn {
+    background-color: var(--clr-bg-alt);
+    border: 1px solid #E2E8F0;
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition);
+    text-align: left;
+}
+
+.service-btn:hover {
+    border-color: var(--clr-charcoal);
+    box-shadow: var(--shadow-2);
+}
+
+.service-info h4 {
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+    color: var(--clr-midnight);
+}
+
+.service-info p {
+    font-size: 0.875rem;
+    color: var(--clr-mid-gray);
+}
+
+.service-price {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--clr-charcoal);
+    opacity: 0.3;
+}
+
 .time-slots-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

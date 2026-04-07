@@ -51,6 +51,8 @@ function getPrimaryCalendar() {
 // Handles the GET request to fetch available slots
 function doGet(e) {
   const dateStr = e.parameter.date; 
+  const duration = parseInt(e.parameter.duration) || SERVICE_DURATION;
+  
   if (!dateStr) return respondJSON({ error: "No date provided." });
 
   const [year, month, day] = dateStr.split('-').map(Number);
@@ -85,35 +87,34 @@ function doGet(e) {
   const now = new Date(); 
   const minSlotTime = new Date(now.getTime() + 6 * 60 * 60 * 1000); // 6-hour buffer
 
-  // Generate slots for 90-minute intervals
+  // Generate hourly slots (10:00, 11:00, etc.)
   let currentSlotTime = new Date(year, month - 1, day, hours.start, 0, 0);
   const endOfWorkDay = new Date(year, month - 1, day, hours.end, 0, 0);
 
   while (currentSlotTime < endOfWorkDay) {
-    const slotEnd = new Date(currentSlotTime.getTime() + SERVICE_DURATION * 60000);
+    const slotEnd = new Date(currentSlotTime.getTime() + duration * 60000);
     
     if (slotEnd <= endOfWorkDay && currentSlotTime > minSlotTime) {
       if (currentSlotTime.getHours() === 14) { // Lunch break
-        currentSlotTime = new Date(currentSlotTime.getTime() + SERVICE_DURATION * 60000);
-        continue;
-      }
-
-      let isOverlapping = false;
-      for (const busy of busyPeriods) {
-        if (currentSlotTime < busy.end && slotEnd > busy.start) {
-          isOverlapping = true; break;
+        // Skip hourly slot at 14:00 (lunch)
+      } else {
+        let isOverlapping = false;
+        for (const busy of busyPeriods) {
+          if (currentSlotTime < busy.end && slotEnd > busy.start) {
+            isOverlapping = true; break;
+          }
         }
-      }
-      
-      if (!isOverlapping) {
-        const h = currentSlotTime.getHours().toString().padStart(2, '0');
-        const m = currentSlotTime.getMinutes().toString().padStart(2, '0');
-        availableSlots.push(`${h}:${m}`);
+        
+        if (!isOverlapping) {
+          const h = currentSlotTime.getHours().toString().padStart(2, '0');
+          const m = currentSlotTime.getMinutes().toString().padStart(2, '0');
+          availableSlots.push(`${h}:${m}`);
+        }
       }
     }
     
-    // Jump forward by the duration interval to create non-overlapping sequential slots
-    currentSlotTime = new Date(currentSlotTime.getTime() + SERVICE_DURATION * 60000);
+    // Always jump forward by 60 minutes to offer hourly starts (10:00, 11:00, 12:00...)
+    currentSlotTime = new Date(currentSlotTime.getTime() + 60 * 60000);
   }
   
   return respondJSON({ date: dateStr, slots: availableSlots });
@@ -124,25 +125,25 @@ function doPost(e) {
   try {
     const postData = JSON.parse(e.postData.contents);
     if (postData.action === 'book') {
-      const { date, time, name, email, phone } = postData;
+      const { date, time, duration, service, name, email, phone } = postData;
       
       const [year, month, day] = date.split('-').map(Number);
       const [hour, minute] = time.split(':').map(Number);
       
       const startTime = new Date(year, month - 1, day, hour, minute);
-      const endTime = new Date(startTime.getTime() + SERVICE_DURATION * 60000);
+      const endTime = new Date(startTime.getTime() + (duration || SERVICE_DURATION) * 60000);
       
-      const title = `Λεύκανση - ${name}`;
-      const description = `Νέο Ραντεβού από Website\n\nΌνομα: ${name}\nΤηλέφωνο: ${phone}\nEmail: ${email}`;
+      const title = `${service || 'Whitening'} - ${name}`;
+      const description = `Νέο Ραντεβού από Website\n\nΥπηρεσία: ${service}\nΌνομα: ${name}\nΤηλέφωνο: ${phone}\nEmail: ${email}`;
       
       getPrimaryCalendar().createEvent(title, startTime, endTime, { description: description });
       
       // Admin Notification
-      sendAdminNotification(name, email, phone, `${date} ${time}`);
+      sendAdminNotification(name, email, phone, `${date} ${time}`, service);
       
       // Client Confirmation & Reminder
-      sendInitialConfirmationEmail(email, name, startTime);
-      scheduleReminderEmail(email, name, startTime);
+      sendInitialConfirmationEmail(email, name, startTime, service);
+      scheduleReminderEmail(email, name, startTime, service);
       
       return respondJSON({ success: true, message: "Appointment created." });
     }
@@ -156,13 +157,13 @@ function respondJSON(data) {
 
 // -- Scheduled Email Engine --
 // Schedules a reminder email at 9:00 AM on the day of the appointment
-function scheduleReminderEmail(email, name, dateObj) {
+function scheduleReminderEmail(email, name, dateObj, service) {
   const reminderTime = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), 9, 0, 0);
   if (reminderTime <= new Date()) {
-    sendReminderEmail(email, name);
+    sendReminderEmail(email, name, service);
   } else {
     const trigger = ScriptApp.newTrigger('processReminderEmail').timeBased().at(reminderTime).create();
-    PropertiesService.getScriptProperties().setProperty('reminder_' + trigger.getUniqueId(), JSON.stringify({email: email, name: name}));
+    PropertiesService.getScriptProperties().setProperty('reminder_' + trigger.getUniqueId(), JSON.stringify({email: email, name: name, service: service}));
   }
 }
 
@@ -174,7 +175,7 @@ function processReminderEmail(e) {
   
   if (dataStr) {
     const data = JSON.parse(dataStr);
-    sendReminderEmail(data.email, data.name);
+    sendReminderEmail(data.email, data.name, data.service);
     props.deleteProperty('reminder_' + triggerId);
   }
   
@@ -188,16 +189,16 @@ function processReminderEmail(e) {
   }
 }
 
-function sendReminderEmail(email, name) {
-  const subject = "Υπενθύμιση Ραντεβού Λεύκανσης (i-smile) / Whitening Reminder";
+function sendReminderEmail(email, name, service) {
+  const subject = `Υπενθύμιση Ραντεβού: ${service} (i-smile) / Appointment Reminder`;
   const body = `Γεια σας ${name},
   
-Σας υπενθυμίζουμε το σημερινό σας ραντεβού για λεύκανση δοντιών.
+Σας υπενθυμίζουμε το σημερινό σας ραντεβού για: ${service}.
 
 ---
 Hello ${name},
 
-This is a reminder for your teeth whitening appointment today.
+This is a reminder for your appointment today: ${service}.
 
 Με εκτίμηση / Sincerely,
 H Ομάδα του i-smile.`;
@@ -205,18 +206,18 @@ H Ομάδα του i-smile.`;
   GmailApp.sendEmail(email, subject, body, { from: SENDER_ALIAS, name: SENDER_NAME });
 }
 
-function sendInitialConfirmationEmail(email, name, dateObj) {
-  const subject = "Επιβεβαίωση Ραντεβού Λεύκανσης (i-smile) / Whitening Confirmation";
+function sendInitialConfirmationEmail(email, name, dateObj, service) {
+  const subject = `Επιβεβαίωση Ραντεβού: ${service} (i-smile) / Confirmation`;
   const dateStr = Utilities.formatDate(dateObj, Session.getScriptTimeZone(), "dd/MM/yyyy HH:mm");
   
   const body = `Γεια σας ${name},
 
-Ευχαριστούμε για την κράτησή σας! Το ραντεβού σας για λεύκανση δοντιών επιβεβαιώθηκε για τις: ${dateStr}.
+Ευχαριστούμε για την κράτησή σας! Το ραντεβού σας για ${service} επιβεβαιώθηκε για τις: ${dateStr}.
 
 ---
 Hello ${name},
 
-Thank you for your booking! Your teeth whitening appointment is confirmed for: ${dateStr}.
+Thank you for your booking! Your appointment for ${service} is confirmed for: ${dateStr}.
 
 Σας περιμένουμε / We look forward to seeing you.
 
@@ -226,12 +227,13 @@ H Ομάδα του i-smile.`;
   GmailApp.sendEmail(email, subject, body, { from: SENDER_ALIAS, name: SENDER_NAME });
 }
 
-function sendAdminNotification(name, email, phone, slotStr) {
+function sendAdminNotification(name, email, phone, slotStr, service) {
   const adminEmail = '1123alberto@gmail.com'; 
-  const subject = "★ New Whitening Appointment - " + name;
-  const body = `You have a new whitening appointment!
+  const subject = `★ New ${service} Appointment - ${name}`;
+  const body = `You have a new appointment!
 
 DETAILS:
+- Service: ${service}
 - Name: ${name}
 - Email: ${email}
 - Phone: ${phone}

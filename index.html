@@ -135,9 +135,31 @@
                         </div>
                     </div>
 
-                    <!-- Step 2: Time Slots -->
-                    <div id="booking-step-2" class="booking-step" style="display: none;">
+                    <!-- Step 2: Service Selection -->
+                    <div id="booking-step-service" class="booking-step" style="display: none;">
                         <button class="back-btn" onclick="goToStep(1)">&larr; <span data-i18n="back_to_calendar">Πίσω στο Ημερολόγιο</span></button>
+                        <h3 class="step-title" data-i18n="select_service">Επιλέξτε Υπηρεσία</h3>
+                        <div class="service-grid">
+                            <button class="service-btn" onclick="selectService('whitening', 90)">
+                                <div class="service-info">
+                                    <h4 data-i18n="service_whitening">Λεύκανση Δοντιών</h4>
+                                    <p>90 <span data-i18n="mins">λεπτά</span></p>
+                                </div>
+                                <div class="service-price">90'</div>
+                            </button>
+                            <button class="service-btn" onclick="selectService('consult', 60)">
+                                <div class="service-info">
+                                    <h4 data-i18n="service_consult">Aesthetic Consultation</h4>
+                                    <p>60 <span data-i18n="mins">λεπτά</span></p>
+                                </div>
+                                <div class="service-price">60'</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Time Slots -->
+                    <div id="booking-step-2" class="booking-step" style="display: none;">
+                        <button class="back-btn" onclick="goToStep('service')">&larr; <span data-i18n="back_to_services">Πίσω στις Υπηρεσίες</span></button>
                         <h3 class="step-title" id="selected-date-display">...</h3>
                         <div class="time-slots-grid" id="time-slots-grid">
                             <!-- JS will populate available times -->

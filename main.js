@@ -49,11 +49,15 @@ const translations = {
         rights: "All rights reserved.",
 
         // Booking
-        book_section_title: "Κλείστε το Ραντεβού σας",
         book_section_desc: "Επιλέξτε ημερομηνία και ώρα για τη συνεδρία σας.",
-        loading_slots: "Έλεγχος διαθεσιμότητας...",
+        select_service: "Επιλέξτε Υπηρεσία",
+        service_whitening: "Λεύκανση Δοντιών",
+        service_consult: "Dental Esthetic Consult",
+        mins: "λεπτά",
         back_to_calendar: "Πίσω στο Ημερολόγιο",
         back_to_times: "Πίσω στις Ώρες",
+        back_to_services: "Πίσω στις Υπηρεσίες",
+        loading_slots: "Έλεγχος διαθεσιμότητας...",
         enter_details: "Στοιχεία Επικοινωνίας",
         form_name: "Ονοματεπώνυμο *",
         form_email: "Email *",
@@ -115,11 +119,15 @@ const translations = {
         rights: "All rights reserved.",
 
         // Booking
-        book_section_title: "Book Your Appointment",
         book_section_desc: "Select a date and time for your session.",
-        loading_slots: "Checking availability...",
+        select_service: "Select Service",
+        service_whitening: "Teeth Whitening",
+        service_consult: "Dental Esthetic Consult",
+        mins: "mins",
         back_to_calendar: "Back to Calendar",
         back_to_times: "Back to Times",
+        back_to_services: "Back to Services",
+        loading_slots: "Checking availability...",
         enter_details: "Contact Details",
         form_name: "Full Name *",
         form_email: "Email *",
@@ -229,6 +237,8 @@ const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
 
 let selectedDate = null;
 let selectedTime = null;
+let selectedDuration = 90; // Default
+let selectedServiceLabel = 'Whitening';
 let currentWeekStart = new Date();
 
 // Initialize week to today
@@ -240,8 +250,13 @@ currentWeekStart.setDate(diff);
 
 function goToStep(stepNumber) {
     document.querySelectorAll('.booking-step').forEach(el => el.style.display = 'none');
-    document.getElementById(`booking-step-${stepNumber}`).style.display = 'block';
-
+    
+    let stepId = `booking-step-${stepNumber}`;
+    if (stepNumber === 'service') stepId = 'booking-step-service';
+    
+    const stepEl = document.getElementById(stepId);
+    if (stepEl) stepEl.style.display = 'block';
+    
     if (stepNumber === 1) {
         renderCalendar();
     }
@@ -251,13 +266,14 @@ window.goToStep = goToStep; // Expose to global scope for onclick handlers
 function renderCalendar() {
     const grid = document.getElementById('calendar-grid');
     const monthLabel = document.getElementById('calendar-month');
+    if (!grid || !monthLabel) return;
     grid.innerHTML = '';
-
+    
     // Add Day Headers
     const daysEl = ['Δευ', 'Τρι', 'Τετ', 'Πεμ', 'Παρ', 'Σαβ', 'Κυρ'];
     const daysEn = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const activeDays = currentLang === 'el' ? daysEl : daysEn;
-
+    
     activeDays.forEach(d => {
         const div = document.createElement('div');
         div.className = 'day-header';
@@ -268,13 +284,13 @@ function renderCalendar() {
     // Render 35 days (5 weeks)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
+    
     let monthName = "";
-
+    
     for (let i = 0; i < 35; i++) {
         const date = new Date(currentWeekStart);
         date.setDate(date.getDate() + i);
-
+        
         if (i % 7 === 0) {
             const m = date.toLocaleString(document.documentElement.lang, { month: 'long', year: 'numeric' });
             if (!monthName.includes(m)) monthName += (monthName ? " - " : "") + m;
@@ -283,7 +299,7 @@ function renderCalendar() {
         const btn = document.createElement('button');
         btn.className = 'date-btn';
         btn.textContent = date.getDate();
-
+        
         // Disable past dates, Sundays (0), and specific blocked dates
         const y = date.getFullYear();
         const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -296,11 +312,11 @@ function renderCalendar() {
         } else {
             btn.onclick = () => selectDate(date);
         }
-
+        
         if (selectedDate && date.getTime() === selectedDate.getTime()) {
             btn.classList.add('active');
         }
-
+        
         grid.appendChild(btn);
     }
     monthLabel.textContent = monthName;
@@ -309,8 +325,15 @@ function renderCalendar() {
 function selectDate(date) {
     selectedDate = date;
     renderCalendar(); // Reflect selection
-    fetchAndShowSlots(date);
+    goToStep('service');
 }
+
+function selectService(serviceKey, duration) {
+    selectedDuration = duration;
+    selectedServiceLabel = translations[currentLang][`service_${serviceKey}`] || serviceKey;
+    fetchAndShowSlots(selectedDate);
+}
+window.selectService = selectService;
 
 // Format date for display
 function formatDateDisplay(date) {
@@ -320,6 +343,7 @@ function formatDateDisplay(date) {
 
 // Format date for API (YYYY-MM-DD)
 function formatDateAPI(date) {
+    if (!date) return '';
     const y = date.getFullYear();
     const m = String(date.getMonth() + 1).padStart(2, '0');
     const d = String(date.getDate()).padStart(2, '0');
@@ -329,10 +353,10 @@ function formatDateAPI(date) {
 async function fetchAndShowSlots(date) {
     document.getElementById('calendar-loader').style.display = 'flex';
     document.getElementById('selected-date-display').textContent = formatDateDisplay(date);
-
+    
     const slotsGrid = document.getElementById('time-slots-grid');
     slotsGrid.innerHTML = '';
-
+    
     // Saturday logic
     if (date.getDay() === 6) {
         document.getElementById('calendar-loader').style.display = 'none';
@@ -340,32 +364,27 @@ async function fetchAndShowSlots(date) {
         goToStep(2);
         return;
     }
-
+    
     try {
         let availableSlots = [];
-
+        
         if (GOOGLE_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT_URL_HERE")) {
-            // Test mode simulation with 90min slots
-            await new Promise(r => setTimeout(r, 800));
+            // Test mode simulation (hourly starting times)
+            await new Promise(r => setTimeout(r, 800)); 
             const now = new Date();
-            const minTime = new Date(now.getTime() + 6 * 60 * 60 * 1000);
-
-            // 90 min blocks starting from 10:00 (10:00, 11:30, 13:00, 15:30, 17:00, 18:30)
-            const hourStarts = [10, 11, 13, 15, 17, 18];
-            const minuteStarts = [0, 30, 0, 30, 0, 30];
-
-            for (let i = 0; i < hourStarts.length; i++) {
-                const h = hourStarts[i];
-                const m = minuteStarts[i];
-                const slotTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m, 0);
-
+            const minTime = new Date(now.getTime() + 6 * 60 * 60 * 1000); 
+            
+            // Generate hourly start slots from 10:00 to 19:00
+            for (let h = 10; h <= 19; h++) {
+                if (h === 14) continue; // Lunch
+                const slotTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, 0, 0);
                 if (slotTime > minTime) {
-                    availableSlots.push(`${h}:${m.toString().padStart(2, '0')}`);
+                    availableSlots.push(`${h}:00`);
                 }
             }
         } else {
-            // Real fetch to Google Apps Script
-            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getSlots&date=${formatDateAPI(date)}`);
+            // Include duration in API call
+            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getSlots&date=${formatDateAPI(date)}&duration=${selectedDuration}`);
             const data = await response.json();
             availableSlots = data.slots || [];
         }
@@ -381,7 +400,7 @@ async function fetchAndShowSlots(date) {
                 slotsGrid.appendChild(btn);
             });
         }
-
+        
     } catch (error) {
         console.error("Error fetching slots:", error);
         slotsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: red;">Error loading availability.</p>`;
@@ -393,7 +412,7 @@ async function fetchAndShowSlots(date) {
 
 function selectTime(time) {
     selectedTime = time;
-    document.getElementById('final-date-time').textContent = `${formatDateDisplay(selectedDate)} | ${time}`;
+    document.getElementById('final-date-time').textContent = `${formatDateDisplay(selectedDate)} | ${time} (${selectedServiceLabel})`;
     goToStep(3);
 }
 
@@ -408,7 +427,7 @@ document.addEventListener("DOMContentLoaded", () => {
             renderCalendar();
         };
     }
-
+    
     if (nextBtn) {
         nextBtn.onclick = () => {
             currentWeekStart.setDate(currentWeekStart.getDate() + 7);
@@ -424,22 +443,24 @@ document.addEventListener("DOMContentLoaded", () => {
     if (bookingForm) {
         bookingForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-
+            
             const btn = document.getElementById('submit-booking-btn');
             const loader = document.getElementById('submit-loader');
-
+            
             const payload = {
                 action: 'book',
                 date: formatDateAPI(selectedDate),
                 time: selectedTime,
+                duration: selectedDuration,
+                service: selectedServiceLabel,
                 name: document.getElementById('b-name').value,
                 email: document.getElementById('b-email').value,
                 phone: document.getElementById('b-phone').value
             };
-
+            
             btn.disabled = true;
             loader.style.display = 'flex';
-
+            
             try {
                 if (!GOOGLE_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT_URL_HERE")) {
                     await fetch(GOOGLE_SCRIPT_URL, {
