@@ -100,7 +100,7 @@ Paste this where you want the booking widget to appear:
 Attach this code to control the widget UI and simulate fetching availability:
 
 ```javascript
-const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFFb53qyNdBBPDifTrGT3nHhdeWjEXzrpkxXCcDhPL9hwLAtnwqnLOKsHKKLduwSQB/exec"; 
 
 let selectedDate = null;
 let selectedTime = null;
