@@ -203,13 +203,16 @@ function sendReminderEmail(email, name, service, timeStr) {
   
 Σας υπενθυμίζουμε το σημερινό σας ραντεβού για: ${service} στις ${timeStr}.
 
+Με εκτίμηση,
+H Ομάδα του i-smile
+
 ---
 Hello ${name},
 
 This is a reminder for your appointment today: ${service} at ${timeStr}.
 
-Με εκτίμηση / Sincerely,
-H Ομάδα του i-smile.`;
+Sincerely,
+The i-smile Team`;
 
   GmailApp.sendEmail(email, subject, body, { from: SENDER_ALIAS, name: SENDER_NAME });
 }

@@ -233,7 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ==========================================
 
 // IMPORTANT: Replace this URL with your deployed Google Apps Script Web App URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw78io9aQ_vZgomSPRMvbfTIG5_GCfosSUESH9kZ0DanfqhUoO67YA2VMauN4BbO3o5sw/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyqV1kQeI44XL5EpWN0NzVYYJ2CsVQ7-ZEW5M0ie6eGh1H12zcTJACkKIM8ILQiXZWX/exec';
 
 let selectedDate = null;
 let selectedTime = null;
@@ -384,7 +384,10 @@ async function fetchAndShowSlots(date) {
             }
         } else {
             // Include duration in API call
-            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getSlots&date=${formatDateAPI(date)}&duration=${selectedDuration}`);
+            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getSlots&date=${formatDateAPI(date)}&duration=${selectedDuration}`, {
+                method: 'GET',
+                redirect: 'follow'
+            });
             const data = await response.json();
             availableSlots = data.slots || [];
         }
