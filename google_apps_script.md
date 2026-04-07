@@ -50,75 +50,79 @@ function getPrimaryCalendar() {
 
 // Handles the GET request to fetch available slots
 function doGet(e) {
-  const dateStr = e.parameter.date; 
-  const duration = parseInt(e.parameter.duration) || SERVICE_DURATION;
-  
-  if (!dateStr) return respondJSON({ error: "No date provided." });
+  try {
+    const dateStr = e.parameter.date; 
+    const duration = parseInt(e.parameter.duration) || SERVICE_DURATION;
+    
+    if (!dateStr) return respondJSON({ error: "No date provided." });
 
-  const [year, month, day] = dateStr.split('-').map(Number);
-  const targetDate = new Date(year, month - 1, day);
-  const dayOfWeek = targetDate.getDay();
-  
-  // 1. Check if clinic is open that day
-  const hours = CLINIC_HOURS[dayOfWeek];
-  if (!hours || BLOCKED_DATES.includes(dateStr)) {
-    return respondJSON({ date: dateStr, slots: [] }); 
-  }
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const targetDate = new Date(year, month - 1, day);
+    const dayOfWeek = targetDate.getDay();
+    
+    // 1. Check if clinic is open that day
+    const hours = CLINIC_HOURS[dayOfWeek];
+    if (!hours || BLOCKED_DATES.includes(dateStr)) {
+      return respondJSON({ date: dateStr, slots: [] }); 
+    }
 
-  // 2. Fetch existing calendar events for that day
-  const allCals = getCalendars();
-  const startOfDay = new Date(year, month - 1, day, 0, 0, 0);
-  const endOfDay = new Date(year, month - 1, day, 23, 59, 59);
-  
-  let busyPeriods = [];
-  allCals.forEach(cal => {
-    const events = cal.getEvents(startOfDay, endOfDay);
-    events.forEach(ev => {
-      busyPeriods.push({
-        start: ev.getStartTime(),
-        end: ev.getEndTime()
+    // 2. Fetch existing calendar events for that day
+    const allCals = getCalendars();
+    const startOfDay = new Date(year, month - 1, day, 0, 0, 0);
+    const endOfDay = new Date(year, month - 1, day, 23, 59, 59);
+    
+    let busyPeriods = [];
+    allCals.forEach(cal => {
+      const events = cal.getEvents(startOfDay, endOfDay);
+      events.forEach(ev => {
+        busyPeriods.push({
+          start: ev.getStartTime(),
+          end: ev.getEndTime()
+        });
       });
     });
-  });
-  busyPeriods.sort((a, b) => a.start - b.start);
-  
-  // 3. Generate all possible time slots for the day
-  let availableSlots = [];
-  const now = new Date(); 
-  const minSlotTime = new Date(now.getTime() + 6 * 60 * 60 * 1000); // 6-hour buffer
-
-  // Generate hourly slots (10:00, 11:00, etc.)
-  let currentSlotTime = new Date(year, month - 1, day, hours.start, 0, 0);
-  const endOfWorkDay = new Date(year, month - 1, day, hours.end, 0, 0);
-
-  while (currentSlotTime < endOfWorkDay) {
-    const slotEnd = new Date(currentSlotTime.getTime() + duration * 60000);
+    busyPeriods.sort((a, b) => a.start - b.start);
     
-    if (slotEnd <= endOfWorkDay && currentSlotTime > minSlotTime) {
-      const h = currentSlotTime.getHours();
-      if (h === 14 || h === 15 || h === 16) {
-        // Skip 14:00 (lunch), 15:00, and 16:00
-      } else {
-        let isOverlapping = false;
-        for (const busy of busyPeriods) {
-          if (currentSlotTime < busy.end && slotEnd > busy.start) {
-            isOverlapping = true; break;
+    // 3. Generate all possible time slots for the day
+    let availableSlots = [];
+    const now = new Date(); 
+    const minSlotTime = new Date(now.getTime() + 6 * 60 * 60 * 1000); // 6-hour buffer
+
+    // Generate hourly slots (10:00, 11:00, etc.)
+    let currentSlotTime = new Date(year, month - 1, day, hours.start, 0, 0);
+    const endOfWorkDay = new Date(year, month - 1, day, hours.end, 0, 0);
+
+    while (currentSlotTime < endOfWorkDay) {
+      const slotEnd = new Date(currentSlotTime.getTime() + duration * 60000);
+      
+      if (slotEnd <= endOfWorkDay && currentSlotTime > minSlotTime) {
+        const h = currentSlotTime.getHours();
+        if (h === 14 || h === 15 || h === 16) {
+          // Skip 14:00 (lunch), 15:00, and 16:00
+        } else {
+          let isOverlapping = false;
+          for (const busy of busyPeriods) {
+            if (currentSlotTime < busy.end && slotEnd > busy.start) {
+              isOverlapping = true; break;
+            }
+          }
+          
+          if (!isOverlapping) {
+            const h = currentSlotTime.getHours().toString().padStart(2, '0');
+            const m = currentSlotTime.getMinutes().toString().padStart(2, '0');
+            availableSlots.push(`${h}:${m}`);
           }
         }
-        
-        if (!isOverlapping) {
-          const h = currentSlotTime.getHours().toString().padStart(2, '0');
-          const m = currentSlotTime.getMinutes().toString().padStart(2, '0');
-          availableSlots.push(`${h}:${m}`);
-        }
       }
+      
+      // Always jump forward by 60 minutes to offer hourly starts (10:00, 11:00, 12:00...)
+      currentSlotTime = new Date(currentSlotTime.getTime() + 60 * 60000);
     }
     
-    // Always jump forward by 60 minutes to offer hourly starts (10:00, 11:00, 12:00...)
-    currentSlotTime = new Date(currentSlotTime.getTime() + 60 * 60000);
+    return respondJSON({ date: dateStr, slots: availableSlots });
+  } catch (err) {
+    return respondJSON({ error: "Script Error: " + err.toString() });
   }
-  
-  return respondJSON({ date: dateStr, slots: availableSlots });
 }
 
 // Handles the POST request to create the booking
