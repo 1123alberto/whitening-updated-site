@@ -159,12 +159,19 @@ function respondJSON(data) {
 // -- Scheduled Email Engine --
 // Schedules a reminder email at 9:00 AM on the day of the appointment
 function scheduleReminderEmail(email, name, dateObj, service) {
+  const dateStr = Utilities.formatDate(dateObj, Session.getScriptTimeZone(), "HH:mm");
   const reminderTime = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), 9, 0, 0);
+  
   if (reminderTime <= new Date()) {
-    sendReminderEmail(email, name, service);
+    sendReminderEmail(email, name, service, dateStr);
   } else {
     const trigger = ScriptApp.newTrigger('processReminderEmail').timeBased().at(reminderTime).create();
-    PropertiesService.getScriptProperties().setProperty('reminder_' + trigger.getUniqueId(), JSON.stringify({email: email, name: name, service: service}));
+    PropertiesService.getScriptProperties().setProperty('reminder_' + trigger.getUniqueId(), JSON.stringify({
+      email: email, 
+      name: name, 
+      service: service,
+      time: dateStr
+    }));
   }
 }
 
@@ -176,7 +183,7 @@ function processReminderEmail(e) {
   
   if (dataStr) {
     const data = JSON.parse(dataStr);
-    sendReminderEmail(data.email, data.name, data.service);
+    sendReminderEmail(data.email, data.name, data.service, data.time);
     props.deleteProperty('reminder_' + triggerId);
   }
   
@@ -190,16 +197,16 @@ function processReminderEmail(e) {
   }
 }
 
-function sendReminderEmail(email, name, service) {
+function sendReminderEmail(email, name, service, timeStr) {
   const subject = `Υπενθύμιση Ραντεβού: ${service} (i-smile) / Appointment Reminder`;
   const body = `Γεια σας ${name},
   
-Σας υπενθυμίζουμε το σημερινό σας ραντεβού για: ${service}.
+Σας υπενθυμίζουμε το σημερινό σας ραντεβού για: ${service} στις ${timeStr}.
 
 ---
 Hello ${name},
 
-This is a reminder for your appointment today: ${service}.
+This is a reminder for your appointment today: ${service} at ${timeStr}.
 
 Με εκτίμηση / Sincerely,
 H Ομάδα του i-smile.`;
@@ -215,6 +222,9 @@ function sendInitialConfirmationEmail(email, name, dateObj, service) {
 
 Ευχαριστούμε για την κράτησή σας! Το ραντεβού σας για ${service} επιβεβαιώθηκε για τις: ${dateStr}.
 
+Με εκτίμηση,
+H Ομάδα του i-smile
+
 ---
 Hello ${name},
 
@@ -222,8 +232,8 @@ Thank you for your booking! Your appointment for ${service} is confirmed for: ${
 
 Σας περιμένουμε / We look forward to seeing you.
 
-Με εκτίμηση / Sincerely,
-H Ομάδα του i-smile.`;
+Sincerely,
+The i-smile Team`;
 
   GmailApp.sendEmail(email, subject, body, { from: SENDER_ALIAS, name: SENDER_NAME });
 }
