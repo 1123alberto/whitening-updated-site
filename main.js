@@ -305,7 +305,7 @@ function renderCalendar() {
         const m = String(date.getMonth() + 1).padStart(2, '0');
         const d = String(date.getDate()).padStart(2, '0');
         const dateStr = `${y}-${m}-${d}`;
-        const blockedDates = ['2026-04-16', '2026-04-17', '2026-04-18', '2026-04-19', '2026-04-20', '2026-04-21', '2026-05-01'];
+        const blockedDates = ['2026-04-10', '2026-04-11', '2026-04-13', '2026-04-14', '2026-05-01'];
 
         if (date < today || date.getDay() === 0 || blockedDates.includes(dateStr)) {
             btn.classList.add('disabled');
@@ -402,8 +402,8 @@ async function fetchAndShowSlots(date) {
         }
 
     } catch (error) {
-        console.error("Error fetching slots:", error);
-        slotsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: red;">Error loading availability.</p>`;
+        console.error("CRITICAL: Error fetching slots:", error);
+        slotsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: red;">Error loading availability. Please check console (F12).</p>`;
     } finally {
         document.getElementById('calendar-loader').style.display = 'none';
         goToStep(2);
