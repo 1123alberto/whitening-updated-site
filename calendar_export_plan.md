@@ -100,7 +100,7 @@ Paste this where you want the booking widget to appear:
 Attach this code to control the widget UI and simulate fetching availability:
 
 ```javascript
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFFb53qyNdBBPDifTrGT3nHhdeWjEXzrpkxXCcDhPL9hwLAtnwqnLOKsHKKLduwSQB/exec"; 
+const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE"; 
 
 let selectedDate = null;
 let selectedTime = null;
@@ -202,19 +202,13 @@ async function fetchAndShowSlots(date) {
             const isWeekend = date.getDay() === 0 || date.getDay() === 6;
             const hourLimit = isWeekend ? 0 : 20; 
             
-            for(let h = 10; h < hourLimit; h++) {
-                if (h === 14) continue; // Lunch
-                if (h % 2 !== 0 && h !== 10) continue; 
-                
+            const allowedHours = [10, 11, 12, 13, 17, 18, 19];
+            for (let h of allowedHours) {
                 const now = new Date();
                 const minTime = new Date(now.getTime() + 6 * 60 * 60 * 1000); // 6 hour buffer
-                
-                const slotTime1 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, 0, 0);
-                if (slotTime1 > minTime) availableSlots.push(`${h}:00`);
-                
-                if (h + 1 < hourLimit) {
-                    const slotTime2 = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, 30, 0);
-                    if (slotTime2 > minTime) availableSlots.push(`${h}:30`);
+                const slotTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, 0, 0);
+                if (slotTime > minTime && h < hourLimit) {
+                    availableSlots.push(`${h}:00`);
                 }
             }
         } else {
@@ -325,8 +319,8 @@ Paste this into a new Google Apps Script deployed as a Web App to enable live AP
 
 ```javascript
 // --- CONFIGURATION ---
-const SERVICE_DURATION = 90; 
-const CALENDAR_NAME = ''; 
+const SERVICE_DURATION = 60; 
+const CALENDAR_NAMES = ['Online Appointment', 'Dental Office', "M's calendar"]; // 'Online Appointment' is now primary
 
 // Military time: 10 = 10:00 AM, 20 = 8:00 PM
 const CLINIC_HOURS = {
@@ -340,12 +334,23 @@ const CLINIC_HOURS = {
 };
 
 const BLOCKED_DATES = [];
+const SENDER_ALIAS = '1123alberto@gmail.com'; 
+const SENDER_NAME = "Οδοντιατρείο - A. Moshopoulos - Dental Clinic"; 
 // ----------------------
 
-function getCalendar() {
-  if (CALENDAR_NAME === '') return CalendarApp.getDefaultCalendar();
-  const cals = CalendarApp.getCalendarsByName(CALENDAR_NAME);
-  return cals.length > 0 ? cals[0] : CalendarApp.getDefaultCalendar();
+function getCalendars() {
+  const cals = [];
+  CALENDAR_NAMES.forEach(name => {
+    const list = CalendarApp.getCalendarsByName(name);
+    if (list.length > 0) cals.push(list[0]);
+  });
+  if (cals.length === 0) cals.push(CalendarApp.getDefaultCalendar());
+  return cals;
+}
+
+function getPrimaryCalendar() {
+  const list = CalendarApp.getCalendarsByName(CALENDAR_NAMES[0]);
+  return list.length > 0 ? list[0] : CalendarApp.getDefaultCalendar();
 }
 
 function doGet(e) {
@@ -361,26 +366,33 @@ function doGet(e) {
     return respondJSON({ date: dateStr, slots: [] }); 
   }
 
-  const cal = getCalendar();
+  const allCals = getCalendars();
   const startOfDay = new Date(year, month - 1, day, 0, 0, 0);
   const endOfDay = new Date(year, month - 1, day, 23, 59, 59);
   
-  const busyPeriods = cal.getEvents(startOfDay, endOfDay).map(ev => ({
-    start: ev.getStartTime(),
-    end: ev.getEndTime()
-  })).sort((a, b) => a.start - b.start);
+  let busyPeriods = [];
+  allCals.forEach(cal => {
+    const events = cal.getEvents(startOfDay, endOfDay);
+    events.forEach(ev => {
+      busyPeriods.push({
+        start: ev.getStartTime(),
+        end: ev.getEndTime()
+      });
+    });
+  });
+  busyPeriods.sort((a, b) => a.start - b.start);
   
   let availableSlots = [];
-  let currentSlotTime = new Date(year, month - 1, day, hours.start, 0, 0);
-  const endOfWorkDay = new Date(year, month - 1, day, hours.end, 0, 0);
-  
   const now = new Date(); 
   const minSlotTime = new Date(now.getTime() + 6 * 60 * 60 * 1000); // 6-hour minimum buffer
 
-  while (currentSlotTime < endOfWorkDay) {
+  const allowedHours = [10, 11, 12, 13, 17, 18, 19];
+  
+  for (let h of allowedHours) {
+    const currentSlotTime = new Date(year, month - 1, day, h, 0, 0);
     const slotEnd = new Date(currentSlotTime.getTime() + SERVICE_DURATION * 60000);
     
-    if (slotEnd <= endOfWorkDay && currentSlotTime > minSlotTime) {
+    if (currentSlotTime > minSlotTime) {
       let isOverlapping = false;
       for (const busy of busyPeriods) {
         if (currentSlotTime < busy.end && slotEnd > busy.start) {
@@ -389,12 +401,9 @@ function doGet(e) {
       }
       
       if (!isOverlapping) {
-        const h = currentSlotTime.getHours().toString().padStart(2, '0');
-        const m = currentSlotTime.getMinutes().toString().padStart(2, '0');
-        availableSlots.push(`${h}:${m}`);
+        availableSlots.push(`${h.toString().padStart(2, '0')}:00`);
       }
     }
-    currentSlotTime = new Date(currentSlotTime.getTime() + SERVICE_DURATION * 60000);
   }
   return respondJSON({ date: dateStr, slots: availableSlots });
 }
@@ -403,7 +412,7 @@ function doPost(e) {
   try {
     const postData = JSON.parse(e.postData.contents);
     if (postData.action === 'book') {
-      const { date, time, name, email, phone } = postData;
+      const { date, time, name, email, phone, services } = postData;
       
       const [year, month, day] = date.split('-').map(Number);
       const [hour, minute] = time.split(':').map(Number);
@@ -412,9 +421,17 @@ function doPost(e) {
       const endTime = new Date(startTime.getTime() + SERVICE_DURATION * 60000);
       
       const title = `Ραντεβού - ${name}`;
-      const description = `Νέο Ραντεβού από Website\n\nΌνομα: ${name}\nΤηλέφωνο: ${phone}\nEmail: ${email}`;
+      const description = `Νέο Ραντεβού από Website\n\nΌνομα: ${name}\nΤηλέφωνο: ${phone}\nEmail: ${email}\nΥπηρεσίες: ${services || 'Δεν επιλέχθηκε καμία'}`;
       
-      getCalendar().createEvent(title, startTime, endTime, { description: description });
+      getPrimaryCalendar().createEvent(title, startTime, endTime, { description: description });
+      
+      // Notify Admin (1123alberto@gmail.com)
+      sendAdminNotification(name, email, phone, `${date} ${time}`, services);
+      
+      // Send immediate confirmation
+      sendInitialConfirmationEmail(email, name, startTime);
+      
+      // Schedule reminder for 9:00 AM on the day of the appointment
       scheduleReminderEmail(email, name, startTime);
       
       return respondJSON({ success: true, message: "Appointment created." });
@@ -458,6 +475,72 @@ function processReminderEmail(e) {
 }
 
 function sendReminderEmail(email, name) {
-  MailApp.sendEmail(email, "Υπενθύμιση Ραντεβού (Κλινική)", `Γεια σας ${name},\n\nΣας υπενθυμίζουμε το σημερινό σας ραντεβού στο ιατρείο μας.\n\nΜε εκτίμηση,\nH Ομάδα μας.`);
+  const subject = "Υπενθύμιση Ραντεβού (Dentplant Clinic) / Appointment Reminder";
+  const body = `Γεια σας ${name},
+
+Σας υπενθυμίζουμε το σημερινό σας ραντεβού στο ιατρείο μας. 
+
+---
+Hello ${name},
+
+This is a reminder for your appointment at our clinic today.
+
+Με εκτίμηση / Sincerely,
+H Ομάδα του Dentplant Clinic.`;
+
+  if (SENDER_ALIAS !== '') {
+    GmailApp.sendEmail(email, subject, body, { from: SENDER_ALIAS, name: SENDER_NAME });
+  } else {
+    MailApp.sendEmail(email, subject, body, { name: SENDER_NAME });
+  }
+}
+
+function sendInitialConfirmationEmail(email, name, dateObj) {
+  const subject = "Επιβεβαίωση Ραντεβού (Dentplant Clinic) / Appointment Confirmation";
+  const dateStr = Utilities.formatDate(dateObj, Session.getScriptTimeZone(), "dd/MM/yyyy HH:mm");
+  
+  const body = `Γεια σας ${name},
+
+Ευχαριστούμε για την κράτησή σας! Το ραντεβού σας επιβεβαιώθηκε για τις: ${dateStr}.
+
+---
+Hello ${name},
+
+Thank you for your booking! Your appointment is confirmed for: ${dateStr}.
+
+Σας περιμένουμε / We look forward to seeing you.
+
+Με εκτίμηση / Sincerely,
+H Ομάδα του Dentplant Clinic.`;
+
+  if (SENDER_ALIAS !== '') {
+    GmailApp.sendEmail(email, subject, body, { from: SENDER_ALIAS, name: SENDER_NAME });
+  } else {
+    MailApp.sendEmail(email, subject, body, { name: SENDER_NAME });
+  }
+}
+
+/**
+ * Sends a notification email to the clinic owner about the new appointment.
+ */
+function sendAdminNotification(name, email, phone, slotStr, services) {
+  const adminEmail = '1123alberto@gmail.com'; 
+  const subject = "★ New Appointment - " + name;
+  const body = `You have a new online appointment!
+
+DETAILS:
+- Name: ${name}
+- Email: ${email}
+- Phone: ${phone}
+- Date/Time: ${slotStr}
+- Services: ${services || 'None'}
+
+Go to your Google Calendar to view more details.`;
+
+  if (SENDER_ALIAS !== '') {
+    GmailApp.sendEmail(adminEmail, subject, body, { from: SENDER_ALIAS, name: SENDER_NAME });
+  } else {
+    MailApp.sendEmail(adminEmail, subject, body, { name: SENDER_NAME });
+  }
 }
 ```

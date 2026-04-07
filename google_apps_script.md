@@ -10,51 +10,48 @@ Follow these steps to connect your website's custom booking form directly to you
 
 ```javascript
 // --- CONFIGURATION ---
-// Set the duration of a single appointment in minutes
-const SERVICE_DURATION = 90; 
+const SERVICE_DURATION = 90; // Whitening treatment is 90 minutes
+const CALENDAR_NAMES = ['Online Appointment', 'Dental Office', "M's calendar"]; 
+const SENDER_ALIAS = '1123alberto@gmail.com'; 
+const SENDER_NAME = 'Λεύκανση - Whitening';
 
-// The exact name of your calendar. Leave as '' to use your primary default calendar.
-const CALENDAR_NAME = ''; 
-
-// Define Clinic Hours (Military time: 10 = 10:00 AM, 20 = 8:00 PM)
+// Military time: 10 = 10:00 AM, 20 = 8:00 PM
 const CLINIC_HOURS = {
-  1: { start: 10, end: 20 }, // Monday
-  2: { start: 10, end: 20 }, // Tuesday
-  3: { start: 10, end: 20 }, // Wednesday
-  4: { start: 10, end: 20 }, // Thursday
-  5: { start: 10, end: 20 }, // Friday
-  6: null,                   // Saturday (Closed / Phone only)
-  0: null                    // Sunday (Closed)
+  1: { start: 10, end: 20 }, // Mon
+  2: { start: 10, end: 20 }, // Tue
+  3: { start: 10, end: 20 }, // Wed
+  4: { start: 10, end: 20 }, // Thu
+  5: { start: 10, end: 20 }, // Fri
+  6: null, // Sat
+  0: null  // Sun
 };
 
 // Add specific dates you want to block out entirely (Format: 'YYYY-MM-DD')
 const BLOCKED_DATES = [
-   '2026-04-16',
-   '2026-04-17',
-   '2026-04-18',
-   '2026-04-19',
-   '2026-04-20',
-   '2026-04-21',
-   '2026-05-01'
+  '2026-04-16', '2026-04-17', '2026-04-18', '2026-04-19', 
+  '2026-04-20', '2026-04-21', '2026-05-01'
 ];
 // ----------------------
 
-function getCalendar() {
-  if (CALENDAR_NAME === '') {
-    return CalendarApp.getDefaultCalendar();
-  } else {
-    const cals = CalendarApp.getCalendarsByName(CALENDAR_NAME);
-    return cals.length > 0 ? cals[0] : CalendarApp.getDefaultCalendar();
-  }
+function getCalendars() {
+  const cals = [];
+  CALENDAR_NAMES.forEach(name => {
+    const list = CalendarApp.getCalendarsByName(name);
+    if (list.length > 0) cals.push(list[0]);
+  });
+  if (cals.length === 0) cals.push(CalendarApp.getDefaultCalendar());
+  return cals;
+}
+
+function getPrimaryCalendar() {
+  const list = CalendarApp.getCalendarsByName(CALENDAR_NAMES[0]);
+  return list.length > 0 ? list[0] : CalendarApp.getDefaultCalendar();
 }
 
 // Handles the GET request to fetch available slots
 function doGet(e) {
-  const dateStr = e.parameter.date; // Expecting YYYY-MM-DD
-  
-  if (!dateStr) {
-    return respondJSON({ error: "No date provided." });
-  }
+  const dateStr = e.parameter.date; 
+  if (!dateStr) return respondJSON({ error: "No date provided." });
 
   const [year, month, day] = dateStr.split('-').map(Number);
   const targetDate = new Date(year, month - 1, day);
@@ -63,45 +60,52 @@ function doGet(e) {
   // 1. Check if clinic is open that day
   const hours = CLINIC_HOURS[dayOfWeek];
   if (!hours || BLOCKED_DATES.includes(dateStr)) {
-    return respondJSON({ date: dateStr, slots: [] }); // Closed or Blocked
+    return respondJSON({ date: dateStr, slots: [] }); 
   }
 
   // 2. Fetch existing calendar events for that day
-  const cal = getCalendar();
+  const allCals = getCalendars();
   const startOfDay = new Date(year, month - 1, day, 0, 0, 0);
   const endOfDay = new Date(year, month - 1, day, 23, 59, 59);
-  const events = cal.getEvents(startOfDay, endOfDay);
   
-  // Create a sorted list of busy periods
-  const busyPeriods = events.map(ev => ({
-    start: ev.getStartTime(),
-    end: ev.getEndTime()
-  })).sort((a, b) => a.start - b.start);
+  let busyPeriods = [];
+  allCals.forEach(cal => {
+    const events = cal.getEvents(startOfDay, endOfDay);
+    events.forEach(ev => {
+      busyPeriods.push({
+        start: ev.getStartTime(),
+        end: ev.getEndTime()
+      });
+    });
+  });
+  busyPeriods.sort((a, b) => a.start - b.start);
   
   // 3. Generate all possible time slots for the day
   let availableSlots = [];
+  const now = new Date(); 
+  const minSlotTime = new Date(now.getTime() + 6 * 60 * 60 * 1000); // 6-hour buffer
+
+  // Generate slots for 90-minute intervals
   let currentSlotTime = new Date(year, month - 1, day, hours.start, 0, 0);
   const endOfWorkDay = new Date(year, month - 1, day, hours.end, 0, 0);
-  
-  const now = new Date(); // To avoid booking slots in the past if checking today's date
-  const minSlotTime = new Date(now.getTime() + 6 * 60 * 60 * 1000); // 6-hour minimum buffer
 
   while (currentSlotTime < endOfWorkDay) {
     const slotEnd = new Date(currentSlotTime.getTime() + SERVICE_DURATION * 60000);
     
     if (slotEnd <= endOfWorkDay && currentSlotTime > minSlotTime) {
-      // Check if this slot overlaps with any busy period
+      if (currentSlotTime.getHours() === 14) { // Lunch break
+        currentSlotTime = new Date(currentSlotTime.getTime() + SERVICE_DURATION * 60000);
+        continue;
+      }
+
       let isOverlapping = false;
       for (const busy of busyPeriods) {
-        // Overlap condition:
         if (currentSlotTime < busy.end && slotEnd > busy.start) {
-          isOverlapping = true;
-          break;
+          isOverlapping = true; break;
         }
       }
       
       if (!isOverlapping) {
-        // Format time as HH:MM
         const h = currentSlotTime.getHours().toString().padStart(2, '0');
         const m = currentSlotTime.getMinutes().toString().padStart(2, '0');
         availableSlots.push(`${h}:${m}`);
@@ -119,7 +123,6 @@ function doGet(e) {
 function doPost(e) {
   try {
     const postData = JSON.parse(e.postData.contents);
-    
     if (postData.action === 'book') {
       const { date, time, name, email, phone } = postData;
       
@@ -132,46 +135,34 @@ function doPost(e) {
       const title = `Λεύκανση - ${name}`;
       const description = `Νέο Ραντεβού από Website\n\nΌνομα: ${name}\nΤηλέφωνο: ${phone}\nEmail: ${email}`;
       
-      const cal = getCalendar();
-      cal.createEvent(title, startTime, endTime, { description: description });
+      getPrimaryCalendar().createEvent(title, startTime, endTime, { description: description });
       
-      // Schedule reminder email
+      // Admin Notification
+      sendAdminNotification(name, email, phone, `${date} ${time}`);
+      
+      // Client Confirmation & Reminder
+      sendInitialConfirmationEmail(email, name, startTime);
       scheduleReminderEmail(email, name, startTime);
       
       return respondJSON({ success: true, message: "Appointment created." });
     }
-    return respondJSON({ error: "Invalid action." });
-  } catch (error) {
-    return respondJSON({ error: error.toString() });
-  }
+  } catch (error) { return respondJSON({ error: error.toString() }); }
 }
 
 // Helper to construct JSON response
 function respondJSON(data) {
-  return ContentService.createTextOutput(JSON.stringify(data))
-    .setMimeType(ContentService.MimeType.JSON);
+  return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);
 }
 
+// -- Scheduled Email Engine --
 // Schedules a reminder email at 9:00 AM on the day of the appointment
 function scheduleReminderEmail(email, name, dateObj) {
   const reminderTime = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), 9, 0, 0);
-  const now = new Date();
-  
-  if (reminderTime <= now) {
-    // If it's already past 9:00 AM, send immediately
+  if (reminderTime <= new Date()) {
     sendReminderEmail(email, name);
   } else {
-    // Schedule trigger
-    const trigger = ScriptApp.newTrigger('processReminderEmail')
-      .timeBased()
-      .at(reminderTime)
-      .create();
-      
-    // Save data using trigger ID
-    PropertiesService.getScriptProperties().setProperty(
-      'reminder_' + trigger.getUniqueId(),
-      JSON.stringify({email: email, name: name})
-    );
+    const trigger = ScriptApp.newTrigger('processReminderEmail').timeBased().at(reminderTime).create();
+    PropertiesService.getScriptProperties().setProperty('reminder_' + trigger.getUniqueId(), JSON.stringify({email: email, name: name}));
   }
 }
 
@@ -198,9 +189,55 @@ function processReminderEmail(e) {
 }
 
 function sendReminderEmail(email, name) {
-  const subject = "Υπενθύμιση Ραντεβού Λεύκανσης (i-smile)";
-  const body = "Γεια σας " + name + ",\n\nΣας υπενθυμίζουμε το σημερινό σας ραντεβού για λεύκανση δοντιών.\n\nΜε εκτίμηση,\nH Ομάδα του i-smile.";
-  MailApp.sendEmail(email, subject, body);
+  const subject = "Υπενθύμιση Ραντεβού Λεύκανσης (i-smile) / Whitening Reminder";
+  const body = `Γεια σας ${name},
+  
+Σας υπενθυμίζουμε το σημερινό σας ραντεβού για λεύκανση δοντιών.
+
+---
+Hello ${name},
+
+This is a reminder for your teeth whitening appointment today.
+
+Με εκτίμηση / Sincerely,
+H Ομάδα του i-smile.`;
+
+  GmailApp.sendEmail(email, subject, body, { from: SENDER_ALIAS, name: SENDER_NAME });
+}
+
+function sendInitialConfirmationEmail(email, name, dateObj) {
+  const subject = "Επιβεβαίωση Ραντεβού Λεύκανσης (i-smile) / Whitening Confirmation";
+  const dateStr = Utilities.formatDate(dateObj, Session.getScriptTimeZone(), "dd/MM/yyyy HH:mm");
+  
+  const body = `Γεια σας ${name},
+
+Ευχαριστούμε για την κράτησή σας! Το ραντεβού σας για λεύκανση δοντιών επιβεβαιώθηκε για τις: ${dateStr}.
+
+---
+Hello ${name},
+
+Thank you for your booking! Your teeth whitening appointment is confirmed for: ${dateStr}.
+
+Σας περιμένουμε / We look forward to seeing you.
+
+Με εκτίμηση / Sincerely,
+H Ομάδα του i-smile.`;
+
+  GmailApp.sendEmail(email, subject, body, { from: SENDER_ALIAS, name: SENDER_NAME });
+}
+
+function sendAdminNotification(name, email, phone, slotStr) {
+  const adminEmail = '1123alberto@gmail.com'; 
+  const subject = "★ New Whitening Appointment - " + name;
+  const body = `You have a new whitening appointment!
+
+DETAILS:
+- Name: ${name}
+- Email: ${email}
+- Phone: ${phone}
+- Date/Time: ${slotStr}`;
+
+  GmailApp.sendEmail(adminEmail, subject, body, { from: SENDER_ALIAS, name: SENDER_NAME });
 }
 ```
 
