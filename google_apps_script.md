@@ -28,8 +28,8 @@ const CLINIC_HOURS = {
 
 // Add specific dates you want to block out entirely (Format: 'YYYY-MM-DD')
 const BLOCKED_DATES = [
-  '2026-04-16', '2026-04-17', '2026-04-18', '2026-04-19', 
-  '2026-04-20', '2026-04-21', '2026-05-01'
+  '2026-04-10', '2026-04-11', '2026-04-13', '2026-04-14', 
+  '2026-05-01'
 ];
 // ----------------------
 
@@ -256,7 +256,7 @@ DETAILS:
 
 ## 3. Link it to Your Website
 1. Open up the `main.js` file of your website.
-2. Find line 158 which looks like this:
+2. Find line 236 which looks like this:
    `const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";`
 3. Replace `"YOUR_GOOGLE_APPS_SCRIPT_URL_HERE"` with the long URL you copied from Google Apps Script. 
 4. Save the file. Your dynamic calendar is now officially live and connected to your personal Calendar!

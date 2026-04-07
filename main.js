@@ -233,7 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ==========================================
 
 // IMPORTANT: Replace this URL with your deployed Google Apps Script Web App URL
-const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw78io9aQ_vZgomSPRMvbfTIG5_GCfosSUESH9kZ0DanfqhUoO67YA2VMauN4BbO3o5sw/exec';
 
 let selectedDate = null;
 let selectedTime = null;
@@ -250,13 +250,13 @@ currentWeekStart.setDate(diff);
 
 function goToStep(stepNumber) {
     document.querySelectorAll('.booking-step').forEach(el => el.style.display = 'none');
-    
+
     let stepId = `booking-step-${stepNumber}`;
     if (stepNumber === 'service') stepId = 'booking-step-service';
-    
+
     const stepEl = document.getElementById(stepId);
     if (stepEl) stepEl.style.display = 'block';
-    
+
     if (stepNumber === 1) {
         renderCalendar();
     }
@@ -268,12 +268,12 @@ function renderCalendar() {
     const monthLabel = document.getElementById('calendar-month');
     if (!grid || !monthLabel) return;
     grid.innerHTML = '';
-    
+
     // Add Day Headers
     const daysEl = ['Δευ', 'Τρι', 'Τετ', 'Πεμ', 'Παρ', 'Σαβ', 'Κυρ'];
     const daysEn = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const activeDays = currentLang === 'el' ? daysEl : daysEn;
-    
+
     activeDays.forEach(d => {
         const div = document.createElement('div');
         div.className = 'day-header';
@@ -284,13 +284,13 @@ function renderCalendar() {
     // Render 35 days (5 weeks)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     let monthName = "";
-    
+
     for (let i = 0; i < 35; i++) {
         const date = new Date(currentWeekStart);
         date.setDate(date.getDate() + i);
-        
+
         if (i % 7 === 0) {
             const m = date.toLocaleString(document.documentElement.lang, { month: 'long', year: 'numeric' });
             if (!monthName.includes(m)) monthName += (monthName ? " - " : "") + m;
@@ -299,7 +299,7 @@ function renderCalendar() {
         const btn = document.createElement('button');
         btn.className = 'date-btn';
         btn.textContent = date.getDate();
-        
+
         // Disable past dates, Sundays (0), and specific blocked dates
         const y = date.getFullYear();
         const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -312,11 +312,11 @@ function renderCalendar() {
         } else {
             btn.onclick = () => selectDate(date);
         }
-        
+
         if (selectedDate && date.getTime() === selectedDate.getTime()) {
             btn.classList.add('active');
         }
-        
+
         grid.appendChild(btn);
     }
     monthLabel.textContent = monthName;
@@ -353,10 +353,10 @@ function formatDateAPI(date) {
 async function fetchAndShowSlots(date) {
     document.getElementById('calendar-loader').style.display = 'flex';
     document.getElementById('selected-date-display').textContent = formatDateDisplay(date);
-    
+
     const slotsGrid = document.getElementById('time-slots-grid');
     slotsGrid.innerHTML = '';
-    
+
     // Saturday logic
     if (date.getDay() === 6) {
         document.getElementById('calendar-loader').style.display = 'none';
@@ -364,16 +364,16 @@ async function fetchAndShowSlots(date) {
         goToStep(2);
         return;
     }
-    
+
     try {
         let availableSlots = [];
-        
+
         if (GOOGLE_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT_URL_HERE")) {
             // Test mode simulation (hourly starting times)
-            await new Promise(r => setTimeout(r, 800)); 
+            await new Promise(r => setTimeout(r, 800));
             const now = new Date();
-            const minTime = new Date(now.getTime() + 6 * 60 * 60 * 1000); 
-            
+            const minTime = new Date(now.getTime() + 6 * 60 * 60 * 1000);
+
             // Generate hourly start slots from 10:00 to 19:00
             for (let h = 10; h <= 19; h++) {
                 if (h === 14 || h === 15 || h === 16) continue; // Lunch & Break
@@ -400,7 +400,7 @@ async function fetchAndShowSlots(date) {
                 slotsGrid.appendChild(btn);
             });
         }
-        
+
     } catch (error) {
         console.error("Error fetching slots:", error);
         slotsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: red;">Error loading availability.</p>`;
@@ -427,7 +427,7 @@ document.addEventListener("DOMContentLoaded", () => {
             renderCalendar();
         };
     }
-    
+
     if (nextBtn) {
         nextBtn.onclick = () => {
             currentWeekStart.setDate(currentWeekStart.getDate() + 7);
@@ -443,10 +443,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (bookingForm) {
         bookingForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const btn = document.getElementById('submit-booking-btn');
             const loader = document.getElementById('submit-loader');
-            
+
             const payload = {
                 action: 'book',
                 date: formatDateAPI(selectedDate),
@@ -457,10 +457,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 email: document.getElementById('b-email').value,
                 phone: document.getElementById('b-phone').value
             };
-            
+
             btn.disabled = true;
             loader.style.display = 'flex';
-            
+
             try {
                 if (!GOOGLE_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT_URL_HERE")) {
                     await fetch(GOOGLE_SCRIPT_URL, {
