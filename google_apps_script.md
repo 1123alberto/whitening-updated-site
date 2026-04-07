@@ -95,8 +95,9 @@ function doGet(e) {
     const slotEnd = new Date(currentSlotTime.getTime() + duration * 60000);
     
     if (slotEnd <= endOfWorkDay && currentSlotTime > minSlotTime) {
-      if (currentSlotTime.getHours() === 14) { // Lunch break
-        // Skip hourly slot at 14:00 (lunch)
+      const h = currentSlotTime.getHours();
+      if (h === 14 || h === 15 || h === 16) {
+        // Skip 14:00 (lunch), 15:00, and 16:00
       } else {
         let isOverlapping = false;
         for (const busy of busyPeriods) {

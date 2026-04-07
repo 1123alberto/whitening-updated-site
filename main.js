@@ -376,7 +376,7 @@ async function fetchAndShowSlots(date) {
             
             // Generate hourly start slots from 10:00 to 19:00
             for (let h = 10; h <= 19; h++) {
-                if (h === 14) continue; // Lunch
+                if (h === 14 || h === 15 || h === 16) continue; // Lunch & Break
                 const slotTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, 0, 0);
                 if (slotTime > minTime) {
                     availableSlots.push(`${h}:00`);
