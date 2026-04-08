@@ -371,25 +371,37 @@ async function fetchAndShowSlots(date) {
         if (GOOGLE_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT_URL_HERE")) {
             // Test mode simulation (hourly starting times)
             await new Promise(r => setTimeout(r, 800));
+            availableSlots = [];
             const now = new Date();
             const minTime = new Date(now.getTime() + 6 * 60 * 60 * 1000);
 
-            // Generate hourly start slots from 10:00 to 19:00
             for (let h = 10; h <= 19; h++) {
-                if (h === 14 || h === 15 || h === 16) continue; // Lunch & Break
+                if (h === 14 || h === 15 || h === 16) continue;
                 const slotTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, 0, 0);
                 if (slotTime > minTime) {
                     availableSlots.push(`${h}:00`);
                 }
             }
         } else {
-            // Include duration in API call
             const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getSlots&date=${formatDateAPI(date)}&duration=${selectedDuration}`, {
                 method: 'GET',
                 redirect: 'follow'
             });
-            const data = await response.json();
-            availableSlots = data.slots || [];
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                const data = await response.json();
+                availableSlots = data.slots || [];
+            } else {
+                // If it's not JSON, it's likely a Google Error page (check your deployment!)
+                const text = await response.text();
+                console.error("Non-JSON response from Google Apps Script. This usually means doGet is missing or the script isn't deployed as 'Anyone'.", text.substring(0, 500));
+                throw new Error("Invalid response format from server.");
+            }
         }
 
         if (availableSlots.length === 0) {
