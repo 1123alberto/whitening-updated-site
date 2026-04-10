@@ -52,7 +52,7 @@ const translations = {
         book_section_desc: "Επιλέξτε ημερομηνία και ώρα για τη συνεδρία σας.",
         select_service: "Επιλέξτε Υπηρεσία",
         service_whitening: "Λεύκανση Δοντιών",
-        service_consult: "Αισθητική Συμβουλευτική",
+        service_consult: "Αισθητική Αξιολόγηση",
         mins: "λεπτά",
         back_to_calendar: "Πίσω στο Ημερολόγιο",
         back_to_times: "Πίσω στις Ώρες",
