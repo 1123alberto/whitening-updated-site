@@ -226,7 +226,41 @@ document.addEventListener("DOMContentLoaded", () => {
     if (yearSpan) {
         yearSpan.textContent = new Date().getFullYear();
     }
+
+    // 5. Check for Reschedule Parameters
+    checkRescheduleParams();
 });
+
+/**
+ * URL Parser for Reschedule Flow
+ * Example: ?reschedule=true&name=John&email=...
+ */
+function checkRescheduleParams() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('reschedule') === 'true') {
+        const name = params.get('name');
+        const email = params.get('email');
+        const phone = params.get('phone');
+        const service = params.get('service');
+
+        // Pre-fill form
+        if (name) document.getElementById('b-name').value = decodeURIComponent(name);
+        if (email) document.getElementById('b-email').value = decodeURIComponent(email);
+        if (phone) document.getElementById('b-phone').value = decodeURIComponent(phone);
+
+        // Visual Feedback
+        const descEl = document.querySelector('#booking [data-i18n="book_section_desc"]');
+        if (descEl) {
+            descEl.innerHTML = `<span style="color:var(--clr-accent); font-weight:600;">(Reschedule)</span> ${currentLang === 'el' ? 'Παρακαλώ επιλέξτε τη νέα ημερομηνία και ώρα.' : 'Please select your new date and time.'}`;
+        }
+
+        // Scroll to booking
+        setTimeout(() => {
+            const bookingSec = document.getElementById('booking');
+            if (bookingSec) bookingSec.scrollIntoView({ behavior: 'smooth' });
+        }, 800);
+    }
+}
 
 // ==========================================
 // Booking System Logic
