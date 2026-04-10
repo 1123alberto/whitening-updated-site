@@ -172,6 +172,20 @@
       font-size: 0.8rem;
     }
 
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background-color: #f5f3ff;
+      color: var(--clr-brand-purple);
+      font-size: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin: 0 auto 2rem;
+      box-shadow: 0 0 0 8px #f5f3ff;
+    }
+
     .hidden {
       display: none;
     }
@@ -235,7 +249,7 @@
 
     <!-- Success State -->
     <div id="success-state" class="hidden">
-      <div style="font-size: 3rem; margin-bottom: 1rem;">✓</div>
+      <div class="success-icon">✓</div>
       <h1>Canceled</h1>
       <p class="subtitle">Το ραντεβού σας ακυρώθηκε επιτυχώς.</p>
       <a href="index.html" class="btn btn-primary" style="display: block;">Return Home</a>

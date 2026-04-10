@@ -780,15 +780,15 @@ ul {
 .success-icon {
     width: 80px;
     height: 80px;
-    background-color: #f0fdf4;
-    color: #22c55e;
+    background-color: #f5f3ff;
+    color: var(--clr-brand-purple);
     font-size: 2.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     margin: 0 auto 2rem;
-    box-shadow: 0 0 0 8px #f0fdf4;
+    box-shadow: 0 0 0 8px #f5f3ff;
 }
 
 /* Responsive adjustments */
