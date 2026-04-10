@@ -196,11 +196,12 @@ ul {
 }
 
 .logo-cursive {
-    font-family: 'Great Vibes', cursive;
-    font-size: 2.8rem;
+    font-family: 'Pinyon Script', cursive;
+    font-size: 4rem;
     color: var(--clr-brand-purple);
     font-weight: 400;
-    margin-bottom: -4px;
+    line-height: 0.7;
+    margin-bottom: 4px;
 }
 
 .logo-subtitle {
@@ -217,7 +218,7 @@ ul {
 }
 
 .footer-logo .logo-cursive {
-    font-size: 2.2rem;
+    font-size: 3.2rem;
 }
 
 .footer-logo .logo-subtitle {
