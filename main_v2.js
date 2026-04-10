@@ -241,24 +241,26 @@ function checkRescheduleParams() {
         const name = params.get('name');
         const email = params.get('email');
         const phone = params.get('phone');
-        const service = params.get('service');
+
+        // Save the old UID to send with the new booking request
+        window.rescheduleUid = params.get('uid');
 
         // Pre-fill form
         if (name) document.getElementById('b-name').value = decodeURIComponent(name);
         if (email) document.getElementById('b-email').value = decodeURIComponent(email);
         if (phone) document.getElementById('b-phone').value = decodeURIComponent(phone);
 
-        // Visual Feedback
+        // Visual Feedback (Prominent)
         const descEl = document.querySelector('#booking [data-i18n="book_section_desc"]');
         if (descEl) {
-            descEl.innerHTML = `<span style="color:var(--clr-accent); font-weight:600;">(Reschedule)</span> ${currentLang === 'el' ? 'Παρακαλώ επιλέξτε τη νέα ημερομηνία και ώρα.' : 'Please select your new date and time.'}`;
+            descEl.innerHTML = `<span style="display:inline-block; background-color:#fef3c7; color:#92400e; padding:2px 8px; border-radius:4px; font-weight:700; margin-right:8px;">${currentLang === 'el' ? 'ΑΛΛΑΓΗ' : 'RESCHEDULE'}</span> ${currentLang === 'el' ? 'Παρακαλώ επιλέξτε τη νέα ημερομηνία και ώρα.' : 'Please select your new date and time.'}`;
         }
 
-        // Scroll to booking
+        // Scroll to booking immediately
         setTimeout(() => {
             const bookingSec = document.getElementById('booking');
-            if (bookingSec) bookingSec.scrollIntoView({ behavior: 'smooth' });
-        }, 800);
+            if (bookingSec) bookingSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 500);
     }
 }
 
@@ -267,7 +269,7 @@ function checkRescheduleParams() {
 // ==========================================
 
 // IMPORTANT: Replace this URL with your deployed Google Apps Script Web App URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyqV1kQeI44XL5EpWN0NzVYYJ2CsVQ7-ZEW5M0ie6eGh1H12zcTJACkKIM8ILQiXZWX/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxvNNqsHihbc9SuLPb4r2Tlin8Tne6AQ8rF38ubQd6k9YY6xaopouajXa7Wuf60-iD43Q/exec';
 
 let selectedDate = null;
 let selectedTime = null;
@@ -289,7 +291,15 @@ function goToStep(stepNumber) {
     if (stepNumber === 'service') stepId = 'booking-step-service';
 
     const stepEl = document.getElementById(stepId);
-    if (stepEl) stepEl.style.display = 'block';
+    if (stepEl) {
+        stepEl.style.display = 'block';
+
+        // Auto-scroll to booking section for better UX on mobile
+        const bookingSec = document.getElementById('booking');
+        if (bookingSec && stepNumber !== 1) {
+            bookingSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
 
     if (stepNumber === 1) {
         renderCalendar();
@@ -472,14 +482,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (prevBtn) {
         prevBtn.onclick = () => {
-            currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // Limit how far back users can go
+            const minStart = new Date(today);
+            minStart.setDate(today.getDate() - 7);
+
+            currentWeekStart.setDate(currentWeekStart.getDate() - 28);
+            if (currentWeekStart < minStart) {
+                // Return to previous Monday
+                const d = today.getDay();
+                const diff = today.getDate() - d + (d === 0 ? -6 : 1);
+                currentWeekStart.setDate(diff);
+            }
             renderCalendar();
         };
     }
 
     if (nextBtn) {
         nextBtn.onclick = () => {
-            currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+            currentWeekStart.setDate(currentWeekStart.getDate() + 28);
             renderCalendar();
         };
     }
@@ -504,7 +527,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 service: selectedServiceLabel,
                 name: document.getElementById('b-name').value,
                 email: document.getElementById('b-email').value,
-                phone: document.getElementById('b-phone').value
+                phone: document.getElementById('b-phone').value,
+                rescheduleUid: window.rescheduleUid || null
             };
 
             btn.disabled = true;

@@ -1,206 +1,341 @@
 <!DOCTYPE html>
-<html>
+<html lang="el">
+
 <head>
-  <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>i-smile | Manage Booking</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+  <title>i-smile | Manage Appointment</title>
+
+  <!-- Typography -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cal-sans@1.0.1/dist/index.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --clr-bg: #ffffff;
-      --clr-text: #1a1a1a;
-      --clr-accent: #b8860b; /* Golden accent */
-      --clr-sub: #666666;
-      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+      --clr-bg: #FFFFFF;
+      --clr-charcoal: #242424;
+      --clr-mid-gray: #898989;
+      --clr-brand-purple: #8b5cf6;
+      --font-display: 'Cal Sans', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --radius-md: 8px;
+      --shadow-2: rgba(34, 42, 53, 0.08) 0px 0px 0px 1px, rgba(34, 42, 53, 0.05) 0px 4px 8px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { 
-      font-family: 'Outfit', sans-serif; 
-      background-color: #fafafa; 
-      color: var(--clr-text);
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: #fcfcfc;
+      color: var(--clr-charcoal);
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      padding: 20px;
+      padding: 2rem;
     }
 
-    .container {
-      background: var(--clr-bg);
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: var(--shadow);
+    .manage-card {
+      background: white;
+      padding: 3rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
       width: 100%;
       max-width: 500px;
       text-align: center;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .logo {
-      font-size: 28px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      margin-bottom: 30px;
-      text-transform: uppercase;
+      font-family: var(--font-display);
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .logo-bold {
+      color: var(--clr-brand-purple);
+      font-weight: 700;
     }
 
     .status-badge {
       display: inline-block;
-      padding: 6px 16px;
-      background: #eefbee;
-      color: #27ae60;
-      border-radius: 50px;
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 20px;
+      padding: 0.5rem 1rem;
+      background: #f0fdf4;
+      color: #16a34a;
+      border-radius: 2rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
     }
 
-    h1 { font-size: 22px; margin-bottom: 10px; }
-    p.subtitle { color: var(--clr-sub); margin-bottom: 30px; line-height: 1.5; }
+    h1 {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
 
-    .details-card {
-      background: #fdfdfd;
-      border: 1px solid #eee;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 30px;
+    p.subtitle {
+      color: var(--clr-mid-gray);
+      font-weight: 300;
+      margin-bottom: 2rem;
+    }
+
+    .details-box {
+      background: #fafafa;
+      border: 1px solid #f0f0f0;
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
       text-align: left;
+      margin-bottom: 2.5rem;
     }
 
-    .detail-row {
+    .detail-item {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 10px;
-      font-size: 15px;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
     }
 
-    .detail-label { color: var(--clr-sub); }
-    .detail-value { font-weight: 600; }
+    .detail-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .label {
+      color: var(--clr-mid-gray);
+    }
+
+    .value {
+      font-weight: 600;
+    }
 
     .actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
 
-    button, a.btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 14px;
-      border-radius: 10px;
-      font-size: 15px;
+    .btn {
+      padding: 1rem;
+      border-radius: 2rem;
+      font-family: var(--font-display);
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s;
       text-decoration: none;
       border: none;
+      font-size: 1rem;
     }
 
-    .btn-reschedule {
-      background: var(--clr-text);
+    .btn-primary {
+      background: var(--clr-charcoal);
       color: white;
     }
 
-    .btn-reschedule:hover { opacity: 0.9; transform: translateY(-2px); }
-
-    .btn-cancel {
-      background: transparent;
-      border: 1px solid #ddd;
-      color: #e74c3c;
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
     }
 
-    .btn-cancel:hover { background: #fff5f5; border-color: #fab1a0; }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #e5e7eb;
+      color: #ef4444;
+    }
 
-    #loader { display: none; margin-top: 20px; color: var(--clr-sub); font-size: 14px; }
+    .btn-outline:hover {
+      background: #fef2f2;
+      border-color: #fecaca;
+    }
 
-    /* Cancellation confirmation state */
-    #cancel-confirm { display: none; }
-    
-    .confirm-title { color: #e74c3c; margin-bottom: 15px; }
+    #loader {
+      display: none;
+      margin-top: 1rem;
+      color: var(--clr-mid-gray);
+      font-size: 0.8rem;
+    }
 
-    .success-view { display: none; }
-    .success-icon { font-size: 50px; color: #27ae60; margin-bottom: 20px; }
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
+
 <body>
 
-  <div class="container">
-    <div class="logo">i-smile</div>
+  <div class="manage-card">
+    <div class="logo"><span class="logo-bold">i</span>-smile</div>
 
-    <!-- MAIN VIEW -->
-    <div id="main-view">
-      <div class="status-badge">Confirmed Appointment</div>
-      <h1>Hello, <?= details.name ?></h1>
-      <p class="subtitle">Looking to change your visit? Choose an action below.</p>
+    <!-- Initial Loader -->
+    <div id="loading-state">
+      <p class="subtitle">Ανάκτηση στοιχείων ραντεβού...</p>
+    </div>
 
-      <div class="details-card">
-        <div class="detail-row">
-          <span class="detail-label">Service:</span>
-          <span class="detail-value"><?= details.service ?></span>
+    <!-- Error State -->
+    <div id="error-state" class="hidden">
+      <h1 id="error-title">Appointment Not Found</h1>
+      <p class="subtitle">Το ραντεβού δεν βρέθηκε ή έχει ήδη ακυρωθεί.</p>
+      <a href="index.html" class="btn btn-primary" style="display: block;">Go to Homepage</a>
+    </div>
+
+    <!-- Details State -->
+    <div id="details-state" class="hidden">
+      <div class="status-badge">Επιβεβαιωμένο / Confirmed</div>
+      <h1 id="patient-name">Hello</h1>
+      <p class="subtitle">Manage your upcoming visit</p>
+
+      <div class="details-box">
+        <div class="detail-item">
+          <span class="label">Υπηρεσία / Service:</span>
+          <span class="value" id="val-service">...</span>
         </div>
-        <div class="detail-row">
-          <span class="detail-label">Date & Time:</span>
-          <span class="detail-value"><?= details.time ?></span>
+        <div class="detail-item">
+          <span class="label">Ημερομηνία / Date:</span>
+          <span class="value" id="val-date">...</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Ώρα / Time:</span>
+          <span class="value" id="val-time">...</span>
         </div>
       </div>
 
       <div class="actions">
-        <button class="btn-cancel" onclick="showCancelConfirm()">Cancel</button>
-        <a href="https://i-smile.gr?reschedule=true&name=<?= encodeURIComponent(details.name) ?>&email=<?= encodeURIComponent(details.email) ?>&phone=<?= encodeURIComponent(details.phone) ?>" class="btn btn-reschedule">Reschedule</a>
+        <button id="reschedule-btn" class="btn btn-primary">Αλλαγή Ραντεβού / Reschedule</button>
+        <button id="cancel-trigger" class="btn btn-outline">Ακύρωση / Cancel</button>
       </div>
     </div>
 
-    <!-- CANCEL CONFIRM VIEW -->
-    <div id="cancel-confirm">
-      <h2 class="confirm-title">Are you sure?</h2>
-      <p class="subtitle">Once canceled, you will need to book a new slot if you change your mind.</p>
-      
+    <!-- Confirm Cancel -->
+    <div id="cancel-confirm-state" class="hidden">
+      <h1>Are you sure?</h1>
+      <p class="subtitle">Θέλετε να ακυρώσετε το ραντεβού σας; Αυτή η ενέργεια δεν αναιρείται.</p>
       <div class="actions">
-        <button class="btn-cancel" style="background:#e74c3c; color:white;" onclick="executeCancel()">Yes, Cancel It</button>
-        <button class="btn btn-reschedule" onclick="hideCancelConfirm()">Keep Appointment</button>
+        <button id="final-cancel-btn" class="btn btn-outline" style="background: #ef4444; color: white;">Yes, Cancel
+          Appointment</button>
+        <button id="abort-cancel-btn" class="btn btn-primary">No, Keep it</button>
       </div>
     </div>
 
-    <!-- SUCCESS VIEW -->
-    <div id="success-view" class="success-view">
-      <div class="success-icon">✓</div>
-      <h2>Canceled Successfully</h2>
-      <p class="subtitle">Your appointment has been removed from our calendar. A notification has been sent to the clinic.</p>
-      <a href="https://i-smile.gr" class="btn btn-reschedule">Go to Homepage</a>
+    <!-- Success State -->
+    <div id="success-state" class="hidden">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">✓</div>
+      <h1>Canceled</h1>
+      <p class="subtitle">Το ραντεβού σας ακυρώθηκε επιτυχώς.</p>
+      <a href="index.html" class="btn btn-primary" style="display: block;">Return Home</a>
     </div>
 
-    <div id="loader">Processing request...</div>
+    <div id="action-loader" class="hidden">Παρακαλώ περιμένετε...</div>
   </div>
 
   <script>
-    function showCancelConfirm() {
-      document.getElementById('main-view').style.display = 'none';
-      document.getElementById('cancel-confirm').style.display = 'block';
+    // REPLACE WITH YOUR URL
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxvNNqsHihbc9SuLPb4r2Tlin8Tne6AQ8rF38ubQd6k9YY6xaopouajXa7Wuf60-iD43Q/exec';
+
+    let currentAppointment = null;
+    let appointmentUid = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const params = new URLSearchParams(window.location.search);
+      appointmentUid = params.get('uid');
+
+      if (!appointmentUid) {
+        showState('error-state');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getAppointment&uid=${appointmentUid}`);
+        const data = await response.json();
+
+        if (data.success && data.event) {
+          currentAppointment = data.event;
+          renderAppointment(data.event);
+          showState('details-state');
+        } else {
+          showState('error-state');
+        }
+      } catch (err) {
+        console.error(err);
+        showState('error-state');
+      }
+    });
+
+    function renderAppointment(event) {
+      document.getElementById('patient-name').textContent = `Hello, ${event.name}`;
+      document.getElementById('val-service').textContent = event.service;
+
+      const date = new Date(event.start);
+      document.getElementById('val-date').textContent = date.toLocaleDateString('el-GR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      document.getElementById('val-time').textContent = date.toLocaleTimeString('el-GR', { hour: '2-digit', minute: '2-digit' });
     }
 
-    function hideCancelConfirm() {
-      document.getElementById('main-view').style.display = 'block';
-      document.getElementById('cancel-confirm').style.display = 'none';
+    function showState(id) {
+      ['loading-state', 'error-state', 'details-state', 'cancel-confirm-state', 'success-state'].forEach(s => {
+        document.getElementById(s).classList.add('hidden');
+      });
+      document.getElementById(id).classList.remove('hidden');
     }
 
-    function executeCancel() {
-      document.getElementById('cancel-confirm').style.display = 'none';
-      document.getElementById('loader').style.display = 'block';
+    // Cancel Flow
+    document.getElementById('cancel-trigger').onclick = () => showState('cancel-confirm-state');
+    document.getElementById('abort-cancel-btn').onclick = () => showState('details-state');
 
-      google.script.run
-        .withSuccessHandler(function(response) {
-          document.getElementById('loader').style.display = 'none';
-          if (response.success) {
-            document.getElementById('success-view').style.display = 'block';
-          } else {
-            alert("Error: " + response.error);
-            document.getElementById('main-view').style.display = 'block';
-          }
-        })
-        .cancelAppointment('<?= details.id ?>');
-    }
+    document.getElementById('final-cancel-btn').onclick = async () => {
+      const btn = document.getElementById('final-cancel-btn');
+      btn.disabled = true;
+      document.getElementById('action-loader').classList.remove('hidden');
+
+      try {
+        // Using POST with no-cors for GAS
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: JSON.stringify({ action: 'cancel', uid: appointmentUid })
+        });
+
+        showState('success-state');
+      } catch (err) {
+        alert('Σφάλμα κατά την ακύρωση. Παρακαλώ δοκιμάστε ξανά.');
+        btn.disabled = false;
+      } finally {
+        document.getElementById('action-loader').classList.add('hidden');
+      }
+    };
+
+    // Reschedule Flow
+    document.getElementById('reschedule-btn').onclick = () => {
+      if (!currentAppointment) return;
+
+      // Extract from description if needed, or use what we have
+      const params = new URLSearchParams();
+      params.set('reschedule', 'true');
+      params.set('uid', appointmentUid);
+      params.set('name', currentAppointment.name);
+      params.set('service', currentAppointment.service);
+
+      // Note: Phone/Email are in the description. We could parse them here or 
+      // the user can just re-verify them in the form.
+      // For now, let's redirect to home
+      window.location.href = `index.html?${params.toString()}#booking`;
+    };
   </script>
 </body>
+
 </html>

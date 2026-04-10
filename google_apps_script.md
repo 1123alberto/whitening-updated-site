@@ -10,7 +10,11 @@ Follow these steps to connect your website's custom booking form directly to you
 
 ```javascript
 // --- CONFIGURATION ---
-const SERVICE_DURATION = 90; // Whitening treatment is 90 minutes
+const DURATIONS = {
+  'Whitening': 90,
+  'Esthetic Consult': 60
+};
+const DEFAULT_DURATION = 90; 
 const CALENDAR_NAMES = ['Online Appointment', 'Dental Office', "M's calendar"]; 
 const SENDER_ALIAS = '1123alberto@gmail.com'; 
 const SENDER_NAME = 'Λεύκανση - Whitening';
@@ -28,8 +32,7 @@ const CLINIC_HOURS = {
 
 // Add specific dates you want to block out entirely (Format: 'YYYY-MM-DD')
 const BLOCKED_DATES = [
-  '2026-04-10', '2026-04-11', '2026-04-13', '2026-04-14', 
-  '2026-05-01'
+  '2026-04-10', '2026-04-11', '2026-05-01'
 ];
 // ----------------------
 
@@ -48,14 +51,16 @@ function getPrimaryCalendar() {
   return list.length > 0 ? list[0] : CalendarApp.getDefaultCalendar();
 }
 
-// Handles the GET request to fetch available slots OR render management portal
+/**
+ * Handles the GET request to fetch available slots OR fetch appointment details
+ */
 function doGet(e) {
   try {
     const action = e.parameter.action || 'getSlots';
 
     if (action === 'getSlots') {
       const dateStr = e.parameter.date; 
-      const duration = parseInt(e.parameter.duration) || SERVICE_DURATION;
+      const duration = parseInt(e.parameter.duration) || DEFAULT_DURATION;
       
       if (!dateStr) return respondJSON({ error: "No date provided." });
 
@@ -63,13 +68,11 @@ function doGet(e) {
       const targetDate = new Date(year, month - 1, day);
       const dayOfWeek = targetDate.getDay();
       
-      // 1. Check if clinic is open that day
       const hours = CLINIC_HOURS[dayOfWeek];
       if (!hours || BLOCKED_DATES.includes(dateStr)) {
         return respondJSON({ date: dateStr, slots: [] }); 
       }
 
-      // 2. Fetch existing calendar events for that day
       const allCals = getCalendars();
       const startOfDay = new Date(year, month - 1, day, 0, 0, 0);
       const endOfDay = new Date(year, month - 1, day, 23, 59, 59);
@@ -86,12 +89,10 @@ function doGet(e) {
       });
       busyPeriods.sort((a, b) => a.start - b.start);
       
-      // 3. Generate all possible time slots for the day
       let availableSlots = [];
       const now = new Date(); 
       const minSlotTime = new Date(now.getTime() + 6 * 60 * 60 * 1000); // 6-hour buffer
 
-      // Generate hourly slots (10:00, 11:00, etc.)
       let currentSlotTime = new Date(year, month - 1, day, hours.start, 0, 0);
       const endOfWorkDay = new Date(year, month - 1, day, hours.end, 0, 0);
 
@@ -100,9 +101,7 @@ function doGet(e) {
         
         if (slotEnd <= endOfWorkDay && currentSlotTime > minSlotTime) {
           const h = currentSlotTime.getHours();
-          if (h === 14 || h === 15 || h === 16) {
-            // Skip 14:00 (lunch), 15:00, and 16:00
-          } else {
+          if (h !== 14 && h !== 15 && h !== 16) {
             let isOverlapping = false;
             for (const busy of busyPeriods) {
               if (currentSlotTime < busy.end && slotEnd > busy.start) {
@@ -111,91 +110,96 @@ function doGet(e) {
             }
             
             if (!isOverlapping) {
-              const h = currentSlotTime.getHours().toString().padStart(2, '0');
-              const m = currentSlotTime.getMinutes().toString().padStart(2, '0');
-              availableSlots.push(`${h}:${m}`);
+              const hs = currentSlotTime.getHours().toString().padStart(2, '0');
+              const ms = currentSlotTime.getMinutes().toString().padStart(2, '0');
+              availableSlots.push(`${hs}:${ms}`);
             }
           }
         }
-        
-        // Always jump forward by 60 minutes to offer hourly starts (10:00, 11:00, 12:00...)
         currentSlotTime = new Date(currentSlotTime.getTime() + 60 * 60000);
       }
       
       return respondJSON({ date: dateStr, slots: availableSlots });
-    } else if (action === 'manage') {
-      const id = e.parameter.id;
-      const event = getPrimaryCalendar().getEventById(id);
+
+    } else if (action === 'getAppointment') {
+      const uid = e.parameter.uid;
+      if (!uid) return respondJSON({ error: "Missing UID" });
+
+      const now = new Date();
+      const future = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000);
+      const allCals = getCalendars();
       
-      if (!event) return HtmlService.createHtmlOutput("<h2>Error: Appointment not found.</h2>");
-      
-      const details = {
-        id: id,
-        title: event.getTitle(),
-        time: Utilities.formatDate(event.getStartTime(), Session.getScriptTimeZone(), "dd/MM/yyyy HH:mm"),
-        name: event.getTitle().split(' - ')[1] || "Patient",
-        service: event.getTitle().split(' - ')[0] || "Treatment"
-      };
-      
-      // Get description for phone/email
-      const desc = event.getDescription() || "";
-      details.email = desc.match(/Email: (.*)/) ? desc.match(/Email: (.*)/)[1] : "";
-      details.phone = desc.match(/Τηλέφωνο: (.*)/) ? desc.match(/Τηλέφωνο: (.*)/)[1] : "";
-      
-      const template = HtmlService.createTemplateFromFile('manage');
-      template.details = details;
-      return template.evaluate().setTitle("i-smile Management").setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+      for (const cal of allCals) {
+        const events = cal.getEvents(now, future);
+        for (const ev of events) {
+          const desc = ev.getDescription() || "";
+          if (desc.includes(`UID: ${uid}`)) {
+            return respondJSON({
+              success: true,
+              event: {
+                title: ev.getTitle(),
+                start: ev.getStartTime().toISOString(),
+                description: desc,
+                service: ev.getTitle().split(' - ')[0] || "Treatment",
+                name: ev.getTitle().split(' - ')[1] || "Patient"
+              }
+            });
+          }
+        }
+      }
+      return respondJSON({ error: "Appointment not found." });
     }
   } catch (err) {
-    if (e.parameter.action === 'manage') {
-       return HtmlService.createHtmlOutput("<h2>Script Error</h2><p>" + err.toString() + "</p>");
-    }
     return respondJSON({ error: "Script Error: " + err.toString() });
   }
 }
 
-// Handles the POST request to create the booking
+/**
+ * Handles the POST request to create or cancel the booking
+ */
 function doPost(e) {
   try {
     const postData = JSON.parse(e.postData.contents);
+
     if (postData.action === 'book') {
-      const { date, time, duration, service, name, email, phone } = postData;
+      const { date, time, duration, service, name, email, phone, rescheduleUid } = postData;
+      const uid = Math.random().toString(36).substring(2, 9).toUpperCase(); 
       
       const [year, month, day] = date.split('-').map(Number);
       const [hour, minute] = time.split(':').map(Number);
       
       const startTime = new Date(year, month - 1, day, hour, minute);
-      const endTime = new Date(startTime.getTime() + (duration || SERVICE_DURATION) * 60000);
+      const endTime = new Date(startTime.getTime() + (duration || DEFAULT_DURATION) * 60000);
       
       const title = `${service || 'Whitening'} - ${name}`;
-      const description = `Νέο Ραντεβού από Website\n\nΥπηρεσία: ${service}\nΌνομα: ${name}\nΤηλέφωνο: ${phone}\nEmail: ${email}`;
+      const description = `Νέο Ραντεβού από Website\n\nΥπηρεσία: ${service}\nΌνομα: ${name}\nΤηλέφωνο: ${phone}\nEmail: ${email}\n\nUID: ${uid}`;
       
-      const event = getPrimaryCalendar().createEvent(title, startTime, endTime, { description: description });
-      const eventId = event.getId();
+      getPrimaryCalendar().createEvent(title, startTime, endTime, { description: description });
       
-      // Admin Notification
+      if (rescheduleUid) {
+        cancelAppointmentByUID(rescheduleUid, true); 
+      }
+
       sendAdminNotification(name, email, phone, `${date} ${time}`, service);
+      sendInitialConfirmationEmail(email, name, startTime, service, uid);
+      scheduleReminderEmail(email, name, startTime, service, uid);
       
-      // Client Confirmation & Reminder
-      sendInitialConfirmationEmail(email, name, startTime, service, eventId);
-      scheduleReminderEmail(email, name, startTime, service, eventId);
-      
-      return respondJSON({ success: true, message: "Appointment created.", id: eventId });
+      return respondJSON({ success: true, message: "Appointment created.", id: uid });
+
     } else if (postData.action === 'cancel') {
-      const result = cancelAppointment(postData.id);
+      const result = cancelAppointmentByUID(postData.uid);
       return respondJSON(result);
     }
   } catch (error) { return respondJSON({ error: error.toString() }); }
 }
 
-// Helper to construct JSON response
 function respondJSON(data) {
   return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);
 }
 
 // -- Scheduled Email Engine --
-// Schedules a reminder email at 9:00 AM on the day of the appointment
-function scheduleReminderEmail(email, name, dateObj, service, eventId) {
+
+function scheduleReminderEmail(email, name, dateObj, service, uid) {
   const dateStr = Utilities.formatDate(dateObj, Session.getScriptTimeZone(), "HH:mm");
   const reminderTime = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), 9, 0, 0);
   
@@ -207,19 +211,12 @@ function scheduleReminderEmail(email, name, dateObj, service, eventId) {
     
     const props = PropertiesService.getScriptProperties();
     props.setProperty('reminder_' + triggerId, JSON.stringify({
-      email: email, 
-      name: name, 
-      service: service,
-      time: dateStr,
-      eventId: eventId
+      email: email, name: name, service: service, time: dateStr, uid: uid
     }));
-    
-    // Crucial: Link the event to the trigger for later cancellation
-    props.setProperty('event_to_trigger_' + eventId, triggerId);
+    props.setProperty('event_to_trigger_' + uid, triggerId);
   }
 }
 
-// Triggered worker function to send the email and clean up
 function processReminderEmail(e) {
   const triggerId = e.triggerUid;
   const props = PropertiesService.getScriptProperties();
@@ -231,7 +228,6 @@ function processReminderEmail(e) {
     props.deleteProperty('reminder_' + triggerId);
   }
   
-  // Clean up the trigger so it doesn't clutter the project
   const triggers = ScriptApp.getProjectTriggers();
   for (let i = 0; i < triggers.length; i++) {
     if (triggers[i].getUniqueId() === triggerId) {
@@ -243,129 +239,70 @@ function processReminderEmail(e) {
 
 function sendReminderEmail(email, name, service, timeStr) {
   const subject = `Υπενθύμιση Ραντεβού: ${service} (i-smile) / Appointment Reminder`;
-  const body = `Γεια σας ${name},
-  
-Σας υπενθυμίζουμε το σημερινό σας ραντεβού για: ${service} στις ${timeStr}.
-
-Με εκτίμηση,
-H Ομάδα του i-smile
-
----
-Hello ${name},
-
-This is a reminder for your appointment today: ${service} at ${timeStr}.
-
-Sincerely,
-The i-smile Team`;
-
+  const body = `Γεια σας ${name},\n\nΣας υπενθυμίζουμε το σημερινό σας ραντεβού για: ${service} στις ${timeStr}.\n\nΜε εκτίμηση,\nH Ομάδα του i-smile\n\n---\n\nHello ${name},\n\nThis is a reminder for your appointment today: ${service} at ${timeStr}.\n\nSincerely,\nThe i-smile Team`;
   GmailApp.sendEmail(email, subject, body, { from: SENDER_ALIAS, name: SENDER_NAME });
 }
 
-function sendInitialConfirmationEmail(email, name, dateObj, service, eventId) {
+function sendInitialConfirmationEmail(email, name, dateObj, service, uid) {
   const subject = `Επιβεβαίωση Ραντεβού: ${service} (i-smile) / Confirmation`;
   const dateStr = Utilities.formatDate(dateObj, Session.getScriptTimeZone(), "dd/MM/yyyy HH:mm");
-  const scriptUrl = ScriptApp.getService().getUrl();
-  const manageLink = `${scriptUrl}?action=manage&id=${eventId}`;
+  const websiteUrl = 'https://i-smile.gr'; 
+  const manageLink = `${websiteUrl}/manage.html?uid=${uid}`;
   
-  const body = `Γεια σας ${name},
-
-Ευχαριστούμε για την κράτησή σας! Το ραντεβού σας για ${service} επιβεβαιώθηκε για τις: ${dateStr}.
-
-Χρειάζεται να ακυρώσετε ή να αλλάξετε το ραντεβού σας;
-Διαχειριστείτε το εδώ: ${manageLink}
-
-Με εκτίμηση,
-H Ομάδα του i-smile
-
----
-Hello ${name},
-
-Thank you for your booking! Your appointment for ${service} is confirmed for: ${dateStr}.
-
-Need to cancel or change your appointment?
-Manage it here: ${manageLink}
-
-Σας περιμένουμε / We look forward to seeing you.
-
-Sincerely,
-The i-smile Team`;
-
+  const body = `Γεια σας ${name},\n\nΕυχαριστούμε για την κράτησή σας! Το ραντεβού σας για ${service} επιβεβαιώθηκε για τις: ${dateStr}.\n\nΧρειάζεται να ακυρώσετε ή να αλλάξετε το ραντεβού σας;\nΔιαχειριστείτε το εδώ: ${manageLink}\n\nΜε εκτίμηση,\nH Ομάδα του i-smile\n\n---\n\nHello ${name},\n\nThank you for your booking! Your appointment for ${service} is confirmed for: ${dateStr}.\n\nNeed to cancel or change your appointment?\nManage it here: ${manageLink}\n\nSincerely,\nThe i-smile Team`;
   GmailApp.sendEmail(email, subject, body, { from: SENDER_ALIAS, name: SENDER_NAME });
 }
 
 function sendAdminNotification(name, email, phone, slotStr, service) {
   const adminEmail = '1123alberto@gmail.com'; 
   const subject = `★ New ${service} Appointment - ${name}`;
-  const body = `You have a new appointment!
-
-DETAILS:
-- Service: ${service}
-- Name: ${name}
-- Email: ${email}
-- Phone: ${phone}
-- Date/Time: ${slotStr}`;
-
+  const body = `DETAILS:\n- Service: ${service}\n- Name: ${name}\n- Email: ${email}\n- Phone: ${phone}\n- Date/Time: ${slotStr}`;
   GmailApp.sendEmail(adminEmail, subject, body, { from: SENDER_ALIAS, name: SENDER_NAME });
 }
 
-// --- NEW MANAGEMENT FUNCTIONS ---
-
-function cancelAppointment(eventId) {
+function cancelAppointmentByUID(uid, silent = false) {
   try {
     const props = PropertiesService.getScriptProperties();
-    const triggerId = props.getProperty('event_to_trigger_' + eventId);
+    const triggerId = props.getProperty('event_to_trigger_' + uid);
     
-    // 1. Delete Trigger if exists
     if (triggerId) {
       const triggers = ScriptApp.getProjectTriggers();
       for (let i = 0; i < triggers.length; i++) {
-        if (triggers[i].getUniqueId() === triggerId) {
-          ScriptApp.deleteTrigger(triggers[i]);
-          break;
-        }
+        if (triggers[i].getUniqueId() === triggerId) { ScriptApp.deleteTrigger(triggers[i]); break; }
       }
       props.deleteProperty('reminder_' + triggerId);
-      props.deleteProperty('event_to_trigger_' + eventId);
+      props.deleteProperty('event_to_trigger_' + uid);
     }
     
-    // 2. Delete Event from Calendar
-    const event = getPrimaryCalendar().getEventById(eventId);
-    if (event) {
-      const details = {
-        name: event.getTitle().split(' - ')[1] || 'Patient',
-        service: event.getTitle().split(' - ')[0] || 'Treatment',
-        time: Utilities.formatDate(event.getStartTime(), Session.getScriptTimeZone(), "dd/MM/yyyy HH:mm")
-      };
-      event.deleteEvent();
-      
-      // 3. Notify Admin
-      GmailApp.sendEmail('1123alberto@gmail.com', `★ APPOINTMENT CANCELED: ${details.name}`, 
-        `The following appointment has been canceled:\n\nPatient: ${details.name}\nService: ${details.service}\nTime: ${details.time}`,
-        { from: SENDER_ALIAS, name: SENDER_NAME }
-      );
-      
-      return { success: true, message: "Appointment canceled." };
+    const now = new Date();
+    const future = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000);
+    const allCals = getCalendars();
+    
+    for (const cal of allCals) {
+      const events = cal.getEvents(now, future);
+      for (const ev of events) {
+        if (ev.getDescription().includes(`UID: ${uid}`)) {
+          const title = ev.getTitle();
+          const start = ev.getStartTime();
+          ev.deleteEvent();
+          if (!silent) {
+            GmailApp.sendEmail('1123alberto@gmail.com', `★ APPOINTMENT CANCELED: ${title}`, 
+              `The following appointment has been canceled:\n\nUID: ${uid}\nTime: ${start}`);
+          }
+          return { success: true };
+        }
+      }
     }
     return { error: "Appointment not found." };
-  } catch (e) {
-    return { error: e.toString() };
-  }
+  } catch (e) { return { error: e.toString() }; }
 }
 ```
 
 ## 2. Deploy the Script as a Web App
 1. At the top right of the Apps Script editor, click the blue **Deploy** button, then select **New deployment**.
 2. Click the "**Select type**" gear icon, and check **Web app**.
-3. Under **Description**, type "Booking API V1".
-4. Under **Execute as**, ensure it is set to **Me (your email)**. *(This ensures it writes to your calendar)*.
-5. Under **Who has access**, select **Anyone**. *(Crucial, otherwise your website cannot read availability!)*.
-6. Click **Deploy**.
-7. Google will ask for permission to access your calendar. Click **Review permissions**, select your account, click **Advanced**, and then click **Go to [Project Name] (unsafe)**. Allow the permissions.
-8. After it finishes, you will be given a **Web app URL**. Copy this long URL.
-
-## 3. Link it to Your Website
-1. Open up the `main.js` file of your website.
-2. Find line 236 which looks like this:
-   `const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";`
-3. Replace `"YOUR_GOOGLE_APPS_SCRIPT_URL_HERE"` with the long URL you copied from Google Apps Script. 
-4. Save the file. Your dynamic calendar is now officially live and connected to your personal Calendar!
+3. Under **Description**, type "Booking API V2".
+4. Under **Execute as**, ensure it is set to **Me (your email)**.
+5. Under **Who has access**, select **Anyone**.
+6. Click **Deploy**. (Grant permissions if asked).
+7. Copy the **Web app URL** and update it in your `main.js`.
