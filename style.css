@@ -586,7 +586,7 @@ ul {
     max-width: 650px;
     margin: 0 auto;
     position: relative;
-    min-height: 480px;
+    min-height: 400px;
     overflow: hidden;
     /* For transitions */
 }
