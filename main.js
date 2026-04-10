@@ -49,6 +49,7 @@ const translations = {
         rights: "All rights reserved.",
 
         // Booking
+        book_section_title: "Κλείστε το Ραντεβού σας",
         book_section_desc: "Επιλέξτε ημερομηνία και ώρα για τη συνεδρία σας.",
         select_service: "Επιλέξτε Υπηρεσία",
         service_whitening: "Λεύκανση Δοντιών",
@@ -119,6 +120,7 @@ const translations = {
         rights: "All rights reserved.",
 
         // Booking
+        book_section_title: "Book your Appointment",
         book_section_desc: "Select a date and time for your session.",
         select_service: "Select Service",
         service_whitening: "Teeth Whitening",
@@ -399,6 +401,9 @@ async function fetchAndShowSlots(date) {
     document.getElementById('selected-date-display').textContent = formatDateDisplay(date);
 
     const slotsGrid = document.getElementById('time-slots-grid');
+    slotsGrid.style.display = 'grid';
+    slotsGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+    slotsGrid.style.gap = '0.75rem';
     slotsGrid.innerHTML = '';
 
     // Saturday logic
