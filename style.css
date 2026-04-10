@@ -307,6 +307,7 @@ ul {
     padding-top: var(--nav-height);
     display: flex;
     align-items: center;
+    margin-top: 20px;
 }
 
 .hero-grid {
