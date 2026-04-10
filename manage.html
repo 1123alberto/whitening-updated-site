@@ -8,7 +8,7 @@
 
   <!-- Typography -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cal-sans@1.0.1/dist/index.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -62,23 +62,31 @@
       }
     }
 
-    .logo {
-      font-family: var(--font-display);
-      font-size: 1.5rem;
-      margin-bottom: 2rem;
-      color: var(--clr-charcoal);
+    .text-logo {
       display: flex;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
+      text-decoration: none;
+      line-height: 1;
+      margin-bottom: 2rem;
     }
 
-    .logo-img {
-      height: 48px;
-      width: auto;
-    }
-
-    .logo-bold {
+    .logo-cursive {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.8rem;
       color: var(--clr-brand-purple);
-      font-weight: 700;
+      font-weight: 400;
+      margin-bottom: -4px;
+    }
+
+    .logo-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--clr-charcoal);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
     }
 
     .status-badge {
@@ -203,8 +211,9 @@
 <body>
 
   <div class="manage-card">
-    <div class="logo">
-      <img src="assets/images/logo.png" alt="i-smile logo" class="logo-img">
+    <div class="text-logo">
+      <span class="logo-cursive">i-smile</span>
+      <span class="logo-subtitle">COSMETIC DENTISTRY</span>
     </div>
 
     <!-- Initial Loader -->

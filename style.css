@@ -186,32 +186,42 @@ ul {
     transition: var(--transition);
 }
 
-.logo {
-    font-size: 1.75rem;
-    font-family: var(--font-heading);
+.text-logo {
     display: flex;
-    align-items: center;
-    color: var(--clr-charcoal);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    text-decoration: none;
+    line-height: 1;
 }
 
-.logo-bold {
-    font-weight: 700;
+.logo-cursive {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.8rem;
     color: var(--clr-brand-purple);
+    font-weight: 400;
+    margin-bottom: -4px;
 }
 
-.logo-light {
-    font-weight: 300;
+.logo-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
     color: var(--clr-charcoal);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
 }
 
-.logo-img {
-    height: 80px;
-    width: auto;
-    display: block;
+.footer-logo {
+    align-items: flex-start;
 }
 
-.footer-logo .logo-img {
-    height: 40px;
+.footer-logo .logo-cursive {
+    font-size: 2.2rem;
+}
+
+.footer-logo .logo-subtitle {
+    font-size: 0.55rem;
 }
 
 .nav-links {
