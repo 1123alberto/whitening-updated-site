@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>i-smile | Εξειδικευμένη Λεύκανση Δοντιών</title>
+    <title>i-smile | Αισθητική Οδοντιατρική</title>
     <meta name="description"
-        content="Αποκτήστε το τέλειο χαμόγελο σε 90 λεπτά. Επαγγελματική λεύκανση δοντιών με LED και όψεις στο Παλαιό Φάληρο.">
+        content="Εξειδικευμένες υπηρεσίες αισθητικής οδοντιατρικής — λεύκανση, όψεις πορσελάνης και διάφανοι νάρθηκες — στο Παλαιό Φάληρο.">
 
-    <!-- Typography: Cal Sans and Inter (via Google Fonts) -->
+    <!-- Typography -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cal-sans@1.0.1/dist/index.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -16,308 +16,127 @@
 </head>
 
 <body>
-
-    <!-- Header & Navigation -->
-    <header class="header">
-        <div class="container d-flex align-center justify-between">
-            <a href="#" class="text-logo">
-                <span class="logo-cursive">i-smile</span>
-                <span class="logo-subtitle">COSMETIC DENTISTRY</span>
-            </a>
-
-            <nav class="nav-links">
-                <a href="#process" data-i18n="nav_services">Υπηρεσίες</a>
-                <a href="#process" data-i18n="nav_process">Η Διαδικασία</a>
-                <a href="#veneers" data-i18n="nav_veneers">Όψεις</a>
-                <a href="#contact" data-i18n="nav_contact">Επικοινωνία</a>
-            </nav>
-
-            <div class="header-actions">
-                <button id="lang-toggle" class="lang-btn">EN</button>
-                <a href="#booking" class="btn btn-primary" data-i18n="book_now">Κλείστε Ραντεβού</a>
-                <button class="mobile-menu-btn" aria-label="Toggle menu">
-                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
-                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <line x1="3" y1="18" x2="21" y2="18"></line>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </header>
+    <!-- Header -->
+    <header class="header" id="header-root"></header>
 
     <main>
         <!-- Hero Section -->
         <section class="hero">
             <div class="container hero-grid">
                 <div class="hero-content reveal">
-                    <h1 class="hero-title" data-i18n="hero_title">Τίποτα δεν είναι πιο ελκυστικό από ένα <span
-                            class="highlight">τέλειο χαμόγελο</span>.</h1>
-                    <p class="hero-subtitle" data-i18n="hero_subtitle">Μεταμορφώστε το χαμόγελό σας σε μόλις 90 λεπτά με
-                        την προηγμένη τεχνολογία λεύκανσης LED. Ανώδυνα, γρήγορα και με κορυφαία αισθητικά αποτελέσματα.
-                    </p>
+                    <h1 class="hero-title" data-i18n="hero_title">Το τέλειο χαμόγελο <span class="highlight">ξεκινά εδώ</span>.</h1>
+                    <p class="hero-subtitle" data-i18n="hero_subtitle">Εξειδικευμένες υπηρεσίες αισθητικής οδοντιατρικής — λεύκανση, όψεις πορσελάνης και αόρατη ορθοδοντική — για ένα χαμόγελο που εμπνέει αυτοπεποίθηση.</p>
                     <div class="hero-actions">
-                        <a href="#booking" class="btn btn-primary btn-large" data-i18n="book_now">Κλείστε Ραντεβού</a>
-                        <a href="#process" class="btn btn-secondary btn-large" data-i18n="learn_more">Μάθετε
-                            Περισσότερα</a>
+                        <a href="#services" class="btn btn-primary btn-large" data-i18n="hero_cta_explore">Οι Υπηρεσίες μας</a>
+                        <a href="book.html" class="btn btn-secondary btn-large" data-i18n="hero_cta_book">Κλείστε Ραντεβού</a>
                     </div>
                 </div>
                 <div class="hero-image-wrapper reveal delay-1">
-                    <img src="assets/images/hero.png" alt="Happy woman with bright smile" class="hero-image">
-                    <div class="experience-badge">
-                        <span class="badge-number">90</span>
-                        <span class="badge-text" data-i18n="minutes">Λεπτά<br>Θεραπείας</span>
-                    </div>
+                    <img src="assets/images/hero-smile.jpg" alt="Beautiful confident smile" class="hero-image">
                 </div>
             </div>
         </section>
 
-        <!-- Process Section -->
-        <section id="process" class="process-section section-padding bg-light">
+        <!-- Services Section -->
+        <section id="services" class="section-padding bg-light">
             <div class="container">
                 <div class="section-header reveal">
-                    <h2 class="section-title" data-i18n="process_title">Η Διαδικασία Λεύκανσης</h2>
-                    <p class="section-desc" data-i18n="process_desc">Τρία απλά βήματα για το πιο λαμπερό σας χαμόγελο,
-                        σε ένα υπερσύγχρονο και άνετο περιβάλλον.</p>
+                    <h2 class="section-title" data-i18n="services_title">Οι Θεραπείες μας</h2>
+                    <p class="section-desc" data-i18n="services_desc">Τρεις εξειδικευμένες υπηρεσίες σχεδιασμένες για να αναδείξουν το χαμόγελό σας.</p>
                 </div>
 
-                <div class="process-grid">
-                    <div class="process-card reveal">
-                        <div class="step-num">01</div>
-                        <h3 data-i18n="step1_title">Συμβουλευτική Συνεδρία</h3>
-                        <p data-i18n="step1_desc">Αξιολογούμε την τρέχουσα απόχρωση των δοντιών σας και συζητάμε τους
-                            στόχους σας για να εξασφαλίσουμε το ιδανικό αποτέλεσμα.</p>
-                    </div>
-                    <div class="process-card reveal delay-1">
-                        <div class="step-num">02</div>
-                        <h3 data-i18n="step2_title">Εφαρμογή τεχνολογίας LED</h3>
-                        <p data-i18n="step2_desc">Εφαρμόζουμε το εξειδικευμένο gel και το ενεργοποιούμε με λάμπα LED
-                            τελευταίας τεχνολογίας για ανώδυνη λεύκανση.</p>
-                    </div>
-                    <div class="process-card reveal delay-2">
-                        <div class="step-num">03</div>
-                        <h3 data-i18n="step3_title">Χαμόγελο & Φροντίδα</h3>
-                        <p data-i18n="step3_desc">Συγκρίνουμε το αποτέλεσμα με την αρχική απόχρωση και σας δίνουμε
-                            χρήσιμες συμβουλές για τη διατήρηση του λευκού χαμόγελου.</p>
-                    </div>
-                </div>
+                <div class="services-grid">
+                    <!-- Whitening Card -->
+                    <a href="whitening.html" class="service-card reveal">
+                        <div class="service-card-image">
+                            <img src="assets/images/whitening-hero.png" alt="Teeth Whitening">
+                        </div>
+                        <div class="service-card-body">
+                            <div class="service-card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="5"/>
+                                    <line x1="12" y1="1" x2="12" y2="3"/>
+                                    <line x1="12" y1="21" x2="12" y2="23"/>
+                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                                    <line x1="1" y1="12" x2="3" y2="12"/>
+                                    <line x1="21" y1="12" x2="23" y2="12"/>
+                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                                </svg>
+                            </div>
+                            <h3 data-i18n="svc_whitening_title">Λεύκανση Δοντιών</h3>
+                            <p data-i18n="svc_whitening_desc">Άμεσα αποτελέσματα σε μόλις 90 λεπτά χάρη στην προηγμένη τεχνολογία Blue Spectrum LED.</p>
+                            <span class="service-card-link" data-i18n="svc_whitening_link">
+                                Μάθετε περισσότερα
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                            </span>
+                        </div>
+                    </a>
 
-                <div class="process-image-wrap reveal mt-5">
-                    <img src="assets/images/process.png" alt="LED Whitening process" class="full-width-image">
+                    <!-- Veneers Card -->
+                    <a href="veneers.html" class="service-card reveal delay-1">
+                        <div class="service-card-image">
+                            <img src="assets/images/veneers-hero.png" alt="Porcelain Veneers">
+                        </div>
+                        <div class="service-card-body">
+                            <div class="service-card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                    <path d="M2 17l10 5 10-5"/>
+                                    <path d="M2 12l10 5 10-5"/>
+                                </svg>
+                            </div>
+                            <h3 data-i18n="svc_veneers_title">Όψεις Πορσελάνης</h3>
+                            <p data-i18n="svc_veneers_desc">Χειροποίητα λεπτά κελύφη πορσελάνης που χαρίζουν ένα μόνιμα τέλειο και φυσικό χαμόγελο.</p>
+                            <span class="service-card-link" data-i18n="svc_veneers_link">
+                                Μάθετε περισσότερα
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                            </span>
+                        </div>
+                    </a>
+
+                    <!-- Aligners Card -->
+                    <a href="aligners.html" class="service-card reveal delay-2">
+                        <div class="service-card-image">
+                            <img src="assets/images/aligners-hero.png" alt="Clear Aligners">
+                        </div>
+                        <div class="service-card-body">
+                            <div class="service-card-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                                    <line x1="4" y1="22" x2="4" y2="15"/>
+                                </svg>
+                            </div>
+                            <h3 data-i18n="svc_aligners_title">Διάφανοι Νάρθηκες</h3>
+                            <p data-i18n="svc_aligners_desc">Αόρατη ορθοδοντική θεραπεία με αφαιρούμενους νάρθηκες, χωρίς μεταλλικά σιδεράκια.</p>
+                            <span class="service-card-link" data-i18n="svc_aligners_link">
+                                Μάθετε περισσότερα
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                            </span>
+                        </div>
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- Veneers Section -->
-        <section id="veneers" class="veneers-section section-padding">
-            <div class="container container-narrow reveal">
-                <div class="section-header">
-                    <h2 class="section-title" data-i18n="veneers_title">Όψεις Δοντιών (Veneers)</h2>
-                    <p class="section-desc" data-i18n="veneers_desc">Η απόλυτη λύση για ένα μόνιμα συμμετρικό και λευκό
-                        χαμόγελο.</p>
-                </div>
-
-                <div class="veneers-content">
-                    <p class="text-large" data-i18n="veneers_p1">Εκτός από λεύκανση, προσφέρουμε τις πιο σύγχρονες
-                        λύσεις στις όψεις ρητίνης και πορσελάνης. Οι όψεις μπορούν να διορθώσουν το σχήμα, το μέγεθος,
-                        και το χρώμα των δοντιών σας, καλύπτοντας ατέλειες, κενά, ή δυσχρωμίες με μια ελάχιστα
-                        παρεμβατική διαδικασία.</p>
-                    <ul class="benefit-list mt-4">
-                        <li><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"
-                                fill="none">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg> <span data-i18n="ven_bene1">Φυσικό και μόνιμο αποτέλεσμα</span></li>
-                        <li><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"
-                                fill="none">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg> <span data-i18n="ven_bene2">Γρήγορη τοποθέτηση σε λίγες συνεδρίες</span></li>
-                        <li><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"
-                                fill="none">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg> <span data-i18n="ven_bene3">Ανθεκτικότητα στους λεκέδες</span></li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Booking Section -->
-        <section id="booking" class="booking-section section-padding bg-light">
-            <div class="container container-narrow reveal">
-                <div class="section-header">
-                    <h2 class="section-title" data-i18n="book_section_title">Κλείστε το Ραντεβού σας</h2>
-                    <p class="section-desc" data-i18n="book_section_desc">Επιλέξτε ημερομηνία και ώρα για τη συνεδρία
-                        σας.</p>
-                </div>
-
-                <div class="booking-widget">
-                    <!-- Step 1: Calendar -->
-                    <div id="booking-step-1" class="booking-step active">
-                        <div class="calendar-header">
-                            <button id="prev-week" class="calendar-nav-btn">&larr;</button>
-                            <h3 id="calendar-month" class="calendar-month">...</h3>
-                            <button id="next-week" class="calendar-nav-btn">&rarr;</button>
-                        </div>
-                        <div class="calendar-grid" id="calendar-grid">
-                            <!-- JS will populate the 14 days here -->
-                        </div>
-                        <div class="booking-loader" id="calendar-loader" style="display: none;">
-                            <div class="spinner"></div>
-                            <p data-i18n="loading_slots">Έλεγχος διαθεσιμότητας...</p>
-                        </div>
-                    </div>
-
-                    <!-- Step 2: Service Selection -->
-                    <div id="booking-step-service" class="booking-step" style="display: none;">
-                        <button class="back-btn" onclick="goToStep(1)">&larr; <span data-i18n="back_to_calendar">Πίσω
-                                στο Ημερολόγιο</span></button>
-                        <h3 class="step-title" data-i18n="select_service">Επιλέξτε Υπηρεσία</h3>
-                        <div class="service-grid">
-                            <button class="service-btn" onclick="selectService('whitening', 90)">
-                                <div class="service-info">
-                                    <h4 data-i18n="service_whitening">Λεύκανση Δοντιών</h4>
-                                    <p>90 <span data-i18n="mins">λεπτά</span></p>
-                                </div>
-                                <div class="service-price">90'</div>
-                            </button>
-                            <button class="service-btn" onclick="selectService('consult', 60)">
-                                <div class="service-info">
-                                    <h4 data-i18n="service_consult">Αισθητική Αξιολόγηση</h4>
-                                    <p>60 <span data-i18n="mins">λεπτά</span></p>
-                                </div>
-                                <div class="service-price">60'</div>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Step 3: Time Slots -->
-                    <div id="booking-step-2" class="booking-step" style="display: none;">
-                        <button class="back-btn" onclick="goToStep('service')">&larr; <span
-                                data-i18n="back_to_services">Πίσω στις Υπηρεσίες</span></button>
-                        <h3 class="step-title" id="selected-date-display">...</h3>
-                        <div class="time-slots-grid" id="time-slots-grid">
-                            <!-- JS will populate available times -->
-                        </div>
-                    </div>
-
-                    <!-- Step 3: Details Form -->
-                    <div id="booking-step-3" class="booking-step" style="display: none;">
-                        <button class="back-btn" onclick="goToStep(2)">&larr; <span data-i18n="back_to_times">Πίσω στις
-                                Ώρες</span></button>
-                        <h3 class="step-title" data-i18n="enter_details">Στοιχεία Επικοινωνίας</h3>
-                        <p class="selected-slot-info text-large mb-4">
-                            <strong id="final-date-time">...</strong>
-                        </p>
-
-                        <form id="booking-form" class="custom-form">
-                            <div class="form-group">
-                                <label for="b-name" data-i18n="form_name">Ονοματεπώνυμο *</label>
-                                <input type="text" id="b-name" required placeholder="π.χ. Μαρία Παπαδοπούλου">
-                            </div>
-                            <div class="form-group">
-                                <label for="b-email" data-i18n="form_email">Email *</label>
-                                <input type="email" id="b-email" required placeholder="maria@example.com">
-                            </div>
-                            <div class="form-group">
-                                <label for="b-phone" data-i18n="form_phone">Κινητό Τηλέφωνο *</label>
-                                <input type="tel" id="b-phone" required placeholder="6930000000">
-                            </div>
-
-                            <button type="submit" class="btn btn-primary btn-large w-100" id="submit-booking-btn">
-                                <span data-i18n="confirm_booking">Επιβεβαίωση Ραντεβού</span>
-                            </button>
-                            <div class="booking-loader mt-4" id="submit-loader" style="display: none;">
-                                <div class="spinner"></div>
-                                <p data-i18n="saving_booking">Καταχώρηση...</p>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- Step 4: Success Message -->
-                    <div id="booking-step-4" class="booking-step text-center" style="display: none;">
-                        <div class="success-icon">✓</div>
-                        <h3 class="step-title" data-i18n="booking_success">Το ραντεβού σας επιβεβαιώθηκε!</h3>
-                        <p class="text-large" data-i18n="booking_success_desc">Θα λάβετε σύντομα ένα email επιβεβαίωσης.
-                            Σας περιμένουμε!</p>
-                        <button class="btn btn-secondary mt-4" onclick="location.reload()" data-i18n="book_another">Νέο
-                            Ραντεβού</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CTA / Booking Banner -->
+        <!-- CTA Banner -->
         <section class="cta-banner section-padding bg-accent reveal">
             <div class="container text-center">
                 <h2 class="cta-title text-white" data-i18n="cta_title">Είστε έτοιμοι για τη μεταμόρφωση;</h2>
-                <p class="cta-desc text-white mb-4" data-i18n="cta_desc">Κλείστε το ραντεβού σας ηλεκτρονικά σήμερα και
-                    αναδείξτε την καλύτερη εκδοχή του εαυτού σας.</p>
-                <a href="#booking" class="btn btn-primary btn-large btn-white" data-i18n="book_now">Κλείστε Ραντεβού</a>
+                <p class="cta-desc text-white mb-4" data-i18n="cta_desc">Κλείστε το ραντεβού σας online σήμερα και ανακαλύψτε την καλύτερη εκδοχή του χαμόγελού σας.</p>
+                <a href="book.html" class="btn btn-primary btn-large btn-white" data-i18n="book_now">Κλείστε Ραντεβού</a>
             </div>
         </section>
     </main>
 
-    <!-- Footer / Contact -->
-    <footer id="contact" class="footer">
-        <div class="container footer-grid">
-            <div class="footer-col brand-col">
-                <a href="#" class="text-logo footer-logo mb-3">
-                    <span class="logo-cursive">i-smile</span>
-                    <span class="logo-subtitle">COSMETIC DENTISTRY</span>
-                </a>
-                <p class="footer-about" data-i18n="footer_about">Premium υπηρεσίες λεύκανσης δοντιών και αισθητικής
-                    οδοντιατρικής για ένα λαμπερό, γεμάτο αυτοπεποίθηση χαμόγελο.</p>
-            </div>
+    <!-- Footer -->
+    <div id="contact">
+        <footer class="footer" id="footer-root"></footer>
+    </div>
 
-            <div class="footer-col">
-                <h4 data-i18n="contact_info">Στοιχεία Επικοινωνίας</h4>
-                <address class="contact-details">
-                    <p>
-                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"
-                            fill="none">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                            <circle cx="12" cy="10" r="3"></circle>
-                        </svg>
-                        <span data-i18n="address_text">Πλατεία Ντάβαρη 2, Παλαιό Φάληρο</span>
-                    </p>
-                    <p>
-                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"
-                            fill="none">
-                            <path
-                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                            </path>
-                        </svg>
-                        <a href="tel:2109312651">210 931 2651</a>
-                    </p>
-                    <p>
-                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2"
-                            fill="none">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                            </path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                        <a href="mailto:info@i-smile.gr">info@i-smile.gr</a>
-                    </p>
-                </address>
-            </div>
-
-            <div class="footer-col">
-                <h4 data-i18n="working_hours">Ωράριο</h4>
-                <ul class="hours-list">
-                    <li><span class="day" data-i18n="mon_fri">Δευ - Παρ:</span> <span class="time">10:00 - 20:00</span>
-                    </li>
-                    <li><span class="day" data-i18n="sat">Σάββατο:</span> <span class="time" data-i18n="sat_hours">Μόνο
-                            τηλεφωνικά</span></li>
-                    <li><span class="day" data-i18n="sun">Κυριακή:</span> <span class="time"
-                            data-i18n="closed">Κλειστά</span></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom text-center">
-            <p>&copy; <span id="year"></span> <a href="https://dentplant.gr" style="color: inherit; text-decoration: none; cursor: inherit; pointer-events: auto;">A Dentplant Clinic</a>. <span data-i18n="rights">All rights reserved.</span></p>
-        </div>
-    </footer>
-
-    <script src="main.js?v=2604"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>
