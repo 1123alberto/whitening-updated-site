@@ -631,7 +631,7 @@ ul {
 
 @media (max-width: 360px) {
     .booking-widget {
-        padding: 1rem;
+        padding: 0.75rem;
     }
     .date-btn {
         width: 30px;
