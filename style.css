@@ -51,12 +51,15 @@
 
 html {
     scroll-behavior: smooth;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
 }
 
 html::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
+    display: none;
+    /* Chrome, Safari and Opera */
 }
 
 
@@ -68,15 +71,23 @@ body {
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     /* Hide scrollbar for Chrome, Safari and Opera */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
 }
 
 body::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
+    display: none;
+    /* Chrome, Safari and Opera */
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: var(--font-heading);
     font-weight: 600;
     line-height: 1.10;
@@ -156,12 +167,29 @@ ul {
     font-weight: 300;
 }
 
-.mt-4 { margin-top: 2rem; }
-.mt-5 { margin-top: 3rem; }
-.mb-4 { margin-bottom: 2rem; }
-.d-flex { display: flex; }
-.align-center { align-items: center; }
-.justify-between { justify-content: space-between; }
+.mt-4 {
+    margin-top: 2rem;
+}
+
+.mt-5 {
+    margin-top: 3rem;
+}
+
+.mb-4 {
+    margin-bottom: 2rem;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
 
 
 /* ==========================================
@@ -250,25 +278,25 @@ ul {
 .text-logo {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     text-decoration: none;
     line-height: 1;
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 
 .logo-cursive {
-    font-family: 'Pinyon Script', cursive;
-    font-size: 4rem;
+    font-family: 'Passions Conflict', cursive;
+    font-size: 6rem;
     color: var(--clr-brand-purple);
-    font-weight: 500;
-    line-height: 0.7;
-    margin-bottom: 1px;
+    font-weight: 400;
+    line-height: 0.6;
+    margin-bottom: -5px;
 }
 
 .logo-subtitle {
     font-family: 'Inter', sans-serif;
-    font-size: 0.65rem;
+    font-size: 0.5rem;
     font-weight: 500;
     color: var(--clr-charcoal);
     letter-spacing: 0.15em;
@@ -562,9 +590,11 @@ ul {
         padding-top: calc(var(--nav-height) + 2rem);
         padding-bottom: 4rem;
     }
+
     .booking-hero-grid {
         gap: 3rem;
     }
+
     .booking-hero-content .hero-title {
         font-size: 3.5rem;
     }
@@ -576,29 +606,35 @@ ul {
         padding-bottom: 4rem;
         min-height: auto;
     }
+
     .booking-hero-grid {
         flex-direction: column;
         align-items: center;
         justify-content: center;
         gap: 1.5rem;
     }
+
     .booking-hero-content {
         flex: none;
         width: 100%;
         text-align: center;
         margin-bottom: 0;
     }
+
     .booking-hero-content .hero-subtitle {
         margin-inline: auto;
     }
+
     .booking-hero-content .hero-title {
         font-size: 3rem;
     }
+
     .booking-hero-widget {
         flex: none;
         display: block;
         width: 100%;
     }
+
     .booking-hero-widget .booking-widget {
         margin: 0 auto;
         width: 100%;
@@ -610,9 +646,11 @@ ul {
     .booking-widget {
         padding: 1.5rem;
     }
+
     .booking-hero-content .hero-title {
         font-size: 2.5rem;
     }
+
     .service-btn {
         padding: 1.125rem 1rem;
     }
@@ -1133,8 +1171,13 @@ ul {
     transform: translateY(0);
 }
 
-.delay-1 { transition-delay: 0.2s; }
-.delay-2 { transition-delay: 0.4s; }
+.delay-1 {
+    transition-delay: 0.2s;
+}
+
+.delay-2 {
+    transition-delay: 0.4s;
+}
 
 /* Page fade-in */
 main {
@@ -1142,8 +1185,15 @@ main {
 }
 
 @keyframes pageFadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 
@@ -1169,8 +1219,15 @@ main {
 }
 
 @keyframes fadeInSlide {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .calendar-header {
@@ -1426,7 +1483,9 @@ main {
 }
 
 @keyframes spin {
-    100% { transform: rotate(360deg); }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .success-icon {
