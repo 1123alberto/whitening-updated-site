@@ -59,6 +59,13 @@ html::-webkit-scrollbar {
     display: none; /* Chrome, Safari and Opera */
 }
 
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 1rem;
+    }
+}
+
 body {
     font-family: var(--font-body);
     color: var(--clr-charcoal);
@@ -552,13 +559,19 @@ ul {
 }
 
 @media (max-width: 900px) {
+    .booking-hero {
+        padding-top: calc(var(--nav-height) + 2rem);
+        padding-bottom: 4rem;
+        min-height: auto;
+    }
     .booking-hero-grid {
         grid-template-columns: 1fr;
         text-align: center;
+        gap: 2rem;
     }
     .booking-hero-content {
         text-align: center;
-        margin-bottom: 3rem;
+        margin-bottom: 2.5rem;
     }
     .booking-hero-content .hero-subtitle {
         margin-inline: auto;
@@ -568,6 +581,21 @@ ul {
     }
     .booking-hero-widget {
         justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .booking-widget {
+        padding: 1.25rem;
+    }
+    .booking-hero-content .hero-title {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .booking-widget {
+        padding: 1rem;
     }
 }
 
