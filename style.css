@@ -60,9 +60,15 @@ html::-webkit-scrollbar {
 }
 
 
+@media (max-width: 768px) {
+    .container {
+        padding: 0 1.25rem;
+    }
+}
+
 @media (max-width: 480px) {
     .container {
-        padding: 0 1rem;
+        padding: 0 0.5rem;
     }
 }
 
@@ -612,7 +618,7 @@ ul {
 
 @media (max-width: 480px) {
     .booking-widget {
-        padding: 1.125rem;
+        padding: 1rem;
     }
     .date-btn {
         width: 36px;
