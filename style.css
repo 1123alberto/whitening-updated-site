@@ -596,11 +596,13 @@ ul {
     }
     .booking-hero-widget {
         flex: none;
-        justify-content: center;
+        display: block;
         width: 100%;
     }
     .booking-hero-widget .booking-widget {
         margin: 0 auto;
+        width: 100%;
+        max-width: 100%;
     }
 }
 
@@ -618,15 +620,12 @@ ul {
 
 @media (max-width: 480px) {
     .booking-widget {
-        padding: 1rem;
+        padding: 1.25rem;
     }
     .date-btn {
-        width: 36px;
-        height: 36px;
+        width: 34px;
+        height: 34px;
         font-size: 14px;
-    }
-    .calendar-grid {
-        gap: 0.25rem;
     }
 }
 
@@ -635,8 +634,8 @@ ul {
         padding: 1rem;
     }
     .date-btn {
-        width: 32px;
-        height: 32px;
+        width: 30px;
+        height: 30px;
         font-size: 13px;
     }
 }
@@ -1224,8 +1223,10 @@ main {
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 0.25rem 0.125rem;
+    justify-items: center;
+    gap: 4px;
     margin-bottom: 0.75rem;
+    width: 100%;
 }
 
 .day-header {
@@ -1241,9 +1242,9 @@ main {
 .date-btn {
     background: none;
     border: 1px solid transparent;
-    width: 38px;
-    height: 38px;
-    margin: 0 auto;
+    width: 36px;
+    height: 36px;
+    margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
