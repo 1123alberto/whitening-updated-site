@@ -581,6 +581,7 @@ ul {
     }
     .booking-hero-widget {
         justify-content: center;
+        width: 100%;
     }
 }
 
@@ -592,27 +593,27 @@ ul {
         font-size: 2.5rem;
     }
     .service-btn {
-        padding: 1rem;
+        padding: 1.125rem 1rem;
     }
 }
 
 @media (max-width: 480px) {
     .booking-widget {
-        padding: 1rem;
+        padding: 1.125rem;
+    }
+    .date-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+    .calendar-grid {
+        gap: 0.25rem;
     }
 }
 
 @media (max-width: 360px) {
     .booking-widget {
-        padding: 0.75rem;
-    }
-    .date-btn {
-        width: 34px;
-        height: 34px;
-        font-size: 13px;
-    }
-    .calendar-grid {
-        gap: 0.25rem;
+        padding: 1rem;
     }
 }
 
