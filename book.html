@@ -12,121 +12,121 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="booking-page">
     <header class="header" id="header-root"></header>
 
     <main>
         <!-- Booking Hero -->
-        <section class="treatment-hero">
-            <div class="container reveal">
-                <h1 class="hero-title" data-i18n="book_page_title">Κλείστε το Ραντεβού σας</h1>
-                <p class="hero-subtitle" data-i18n="book_page_desc">Επιλέξτε υπηρεσία, ημερομηνία και ώρα για τη συνεδρία σας.</p>
-            </div>
-        </section>
-
-        <!-- Booking Widget -->
-        <section class="section-padding" style="padding-top: 0;">
-            <div class="container container-narrow">
-                <div class="booking-widget reveal">
-                    <!-- Step 1: Calendar -->
-                    <div id="booking-step-1" class="booking-step active">
-                        <div class="calendar-header">
-                            <button id="prev-week" class="calendar-nav-btn">&larr;</button>
-                            <h3 id="calendar-month" class="calendar-month">...</h3>
-                            <button id="next-week" class="calendar-nav-btn">&rarr;</button>
-                        </div>
-                        <div class="calendar-grid" id="calendar-grid">
-                            <!-- JS will populate -->
-                        </div>
+        <section class="booking-hero">
+            <div class="container booking-hero-grid reveal">
+                <div class="booking-hero-content">
+                    <h1 class="hero-title" data-i18n="book_page_title">Κλείστε το Ραντεβού σας</h1>
+                    <p class="hero-subtitle" data-i18n="book_page_desc">Επιλέξτε υπηρεσία, ημερομηνία και ώρα για τη συνεδρία σας.</p>
+                </div>
+                <div class="booking-hero-widget">
+                    <div class="booking-widget">
+                        <!-- Global Loader -->
                         <div class="booking-loader" id="calendar-loader" style="display: none;">
                             <div class="spinner"></div>
                             <p data-i18n="loading_slots">Έλεγχος διαθεσιμότητας...</p>
                         </div>
-                    </div>
 
-                    <!-- Step 2: Service Selection -->
-                    <div id="booking-step-service" class="booking-step" style="display: none;">
-                        <button class="back-btn" onclick="goToStep(1)">&larr; <span data-i18n="back_to_calendar">Πίσω στο Ημερολόγιο</span></button>
-                        <h3 class="step-title" data-i18n="select_service">Επιλέξτε Υπηρεσία</h3>
-                        <div class="service-grid">
-                            <button class="service-btn" data-service="whitening" onclick="selectService('whitening', 90)">
-                                <div class="service-info">
-                                    <h4 data-i18n="service_whitening">Λεύκανση Δοντιών</h4>
-                                    <p>90 <span data-i18n="mins">λεπτά</span></p>
-                                </div>
-                                <div class="service-price">90'</div>
-                            </button>
-                            <button class="service-btn" data-service="veneers" onclick="selectService('veneers_consult', 60)">
-                                <div class="service-info">
-                                    <h4 data-i18n="service_veneers_consult">Αξιολόγηση Όψεων</h4>
-                                    <p>60 <span data-i18n="mins">λεπτά</span></p>
-                                </div>
-                                <div class="service-price">60'</div>
-                            </button>
-                            <button class="service-btn" data-service="aligners" onclick="selectService('aligners_consult', 60)">
-                                <div class="service-info">
-                                    <h4 data-i18n="service_aligners_consult">Αξιολόγηση Νάρθηκα</h4>
-                                    <p>60 <span data-i18n="mins">λεπτά</span></p>
-                                </div>
-                                <div class="service-price">60'</div>
-                            </button>
-                            <button class="service-btn" data-service="consult" onclick="selectService('consult', 30)">
-                                <div class="service-info">
-                                    <h4 data-i18n="service_consult">Γενική Αισθητική Αξιολόγηση</h4>
-                                    <p>30 <span data-i18n="mins">λεπτά</span></p>
-                                </div>
-                                <div class="service-price">30'</div>
-                            </button>
+                        <!-- Step 1: Calendar -->
+                        <div id="booking-step-1" class="booking-step active">
+                            <div class="calendar-header">
+                                <button id="prev-week" class="calendar-nav-btn">&larr;</button>
+                                <h3 id="calendar-month" class="calendar-month">...</h3>
+                                <button id="next-week" class="calendar-nav-btn">&rarr;</button>
+                            </div>
+                            <div class="calendar-grid" id="calendar-grid">
+                                <!-- JS will populate -->
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Step 3: Time Slots -->
-                    <div id="booking-step-2" class="booking-step" style="display: none;">
-                        <button class="back-btn" onclick="goToStep('service')">&larr; <span data-i18n="back_to_services">Πίσω στις Υπηρεσίες</span></button>
-                        <h3 class="step-title" id="selected-date-display">...</h3>
-                        <div class="time-slots-grid" id="time-slots-grid">
-                            <!-- JS will populate -->
+                        <!-- Step 2: Service Selection -->
+                        <div id="booking-step-service" class="booking-step" style="display: none;">
+                            <button class="back-btn" onclick="goToStep(1)">&larr; <span data-i18n="back_to_calendar">Πίσω στο Ημερολόγιο</span></button>
+                            <h3 class="step-title" data-i18n="select_service">Επιλέξτε Υπηρεσία</h3>
+                            <div class="service-grid">
+                                <button class="service-btn" data-service="consult" onclick="selectService('consult', 30)">
+                                    <div class="service-info">
+                                        <h4 data-i18n="service_consult">Γενική Αισθητική Αξιολόγηση</h4>
+                                        <p>30 <span data-i18n="mins">λεπτά</span></p>
+                                    </div>
+                                    <div class="service-price">30'</div>
+                                </button>
+                                <button class="service-btn" data-service="whitening" onclick="selectService('whitening', 90)">
+                                    <div class="service-info">
+                                        <h4 data-i18n="service_whitening">Λεύκανση Δοντιών</h4>
+                                        <p>90 <span data-i18n="mins">λεπτά</span></p>
+                                    </div>
+                                    <div class="service-price">90'</div>
+                                </button>
+                                <button class="service-btn" data-service="veneers" onclick="selectService('veneers_consult', 60)">
+                                    <div class="service-info">
+                                        <h4 data-i18n="service_veneers_consult">Αξιολόγηση Όψεων</h4>
+                                        <p>60 <span data-i18n="mins">λεπτά</span></p>
+                                    </div>
+                                    <div class="service-price">60'</div>
+                                </button>
+                                <button class="service-btn" data-service="aligners" onclick="selectService('aligners_consult', 60)">
+                                    <div class="service-info">
+                                        <h4 data-i18n="service_aligners_consult">Αξιολόγηση Νάρθηκα</h4>
+                                        <p>60 <span data-i18n="mins">λεπτά</span></p>
+                                    </div>
+                                    <div class="service-price">60'</div>
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Step 4: Details Form -->
-                    <div id="booking-step-3" class="booking-step" style="display: none;">
-                        <button class="back-btn" onclick="goToStep(2)">&larr; <span data-i18n="back_to_times">Πίσω στις Ώρες</span></button>
-                        <h3 class="step-title" data-i18n="enter_details">Στοιχεία Επικοινωνίας</h3>
-                        <p class="selected-slot-info text-large mb-4">
-                            <strong id="final-date-time">...</strong>
-                        </p>
+                        <!-- Step 3: Time Slots -->
+                        <div id="booking-step-2" class="booking-step" style="display: none;">
+                            <button class="back-btn" onclick="goToStep('service')">&larr; <span data-i18n="back_to_services">Πίσω στις Υπηρεσίες</span></button>
+                            <h3 class="step-title" id="selected-date-display">...</h3>
+                            <div class="time-slots-grid" id="time-slots-grid">
+                                <!-- JS will populate -->
+                            </div>
+                        </div>
 
-                        <form id="booking-form" class="custom-form">
-                            <div class="form-group">
-                                <label for="b-name" data-i18n="form_name">Ονοματεπώνυμο *</label>
-                                <input type="text" id="b-name" required placeholder="π.χ. Μαρία Παπαδοπούλου">
-                            </div>
-                            <div class="form-group">
-                                <label for="b-email" data-i18n="form_email">Email *</label>
-                                <input type="email" id="b-email" required placeholder="maria@example.com">
-                            </div>
-                            <div class="form-group">
-                                <label for="b-phone" data-i18n="form_phone">Κινητό Τηλέφωνο *</label>
-                                <input type="tel" id="b-phone" required placeholder="6930000000">
-                            </div>
+                        <!-- Step 4: Details Form -->
+                        <div id="booking-step-3" class="booking-step" style="display: none;">
+                            <button class="back-btn" onclick="goToStep(2)">&larr; <span data-i18n="back_to_times">Πίσω στις Ώρες</span></button>
+                            <h3 class="step-title" data-i18n="enter_details">Στοιχεία Επικοινωνίας</h3>
+                            <p class="selected-slot-info text-large mb-4">
+                                <strong id="final-date-time">...</strong>
+                            </p>
 
-                            <button type="submit" class="btn btn-primary btn-large w-100" id="submit-booking-btn">
-                                <span data-i18n="confirm_booking">Επιβεβαίωση Ραντεβού</span>
-                            </button>
-                            <div class="booking-loader mt-4" id="submit-loader" style="display: none;">
-                                <div class="spinner"></div>
-                                <p data-i18n="saving_booking">Καταχώρηση...</p>
-                            </div>
-                        </form>
-                    </div>
+                            <form id="booking-form" class="custom-form">
+                                <div class="form-group">
+                                    <label for="b-name" data-i18n="form_name">Ονοματεπώνυμο *</label>
+                                    <input type="text" id="b-name" required placeholder="π.χ. Μαρία Παπαδοπούλου">
+                                </div>
+                                <div class="form-group">
+                                    <label for="b-email" data-i18n="form_email">Email *</label>
+                                    <input type="email" id="b-email" required placeholder="maria@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="b-phone" data-i18n="form_phone">Κινητό Τηλέφωνο *</label>
+                                    <input type="tel" id="b-phone" required placeholder="6930000000">
+                                </div>
 
-                    <!-- Step 5: Success -->
-                    <div id="booking-step-4" class="booking-step text-center" style="display: none;">
-                        <div class="success-icon">✓</div>
-                        <h3 class="step-title" data-i18n="booking_success">Το ραντεβού σας επιβεβαιώθηκε!</h3>
-                        <p class="text-large" data-i18n="booking_success_desc">Θα λάβετε σύντομα ένα email επιβεβαίωσης. Σας περιμένουμε!</p>
-                        <button class="btn btn-secondary mt-4" onclick="location.reload()" data-i18n="book_another">Νέο Ραντεβού</button>
+                                <button type="submit" class="btn btn-primary btn-large w-100" id="submit-booking-btn">
+                                    <span data-i18n="confirm_booking">Επιβεβαίωση Ραντεβού</span>
+                                </button>
+                                <div class="booking-loader mt-4" id="submit-loader" style="display: none;">
+                                    <div class="spinner"></div>
+                                    <p data-i18n="saving_booking">Καταχώρηση...</p>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Step 5: Success -->
+                        <div id="booking-step-4" class="booking-step text-center" style="display: none;">
+                            <div class="success-icon">✓</div>
+                            <h3 class="step-title" data-i18n="booking_success">Το ραντεβού σας επιβεβαιώθηκε!</h3>
+                            <p class="text-large" data-i18n="booking_success_desc">Θα λάβετε σύντομα ένα email επιβεβαίωσης. Σας περιμένουμε!</p>
+                            <button class="btn btn-secondary mt-4" onclick="location.reload()" data-i18n="book_another">Νέο Ραντεβού</button>
+                        </div>
                     </div>
                 </div>
             </div>

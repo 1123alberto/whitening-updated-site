@@ -21,10 +21,10 @@ currentWeekStart.setDate(diffToMonday);
 
 // Service definitions
 const services = [
+    { key: 'consult', duration: 30, i18nKey: 'service_consult' },
     { key: 'whitening', duration: 90, i18nKey: 'service_whitening' },
     { key: 'veneers', duration: 60, i18nKey: 'service_veneers_consult' },
     { key: 'aligners', duration: 60, i18nKey: 'service_aligners_consult' },
-    { key: 'consult', duration: 30, i18nKey: 'service_consult' },
 ];
 
 // ── Step Navigation ──
@@ -38,11 +38,13 @@ function goToStep(stepNumber) {
     if (stepEl) {
         stepEl.style.display = 'block';
 
-        // Scroll to booking widget for better UX
+        /* 
+        // Scroll to booking widget for better UX (Disabled for Hero layout)
         const bookingWidget = document.querySelector('.booking-widget');
         if (bookingWidget && stepNumber !== 1) {
             bookingWidget.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+        */
     }
 
     if (stepNumber === 1) {
