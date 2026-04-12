@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://i-smile.gr/index.html</loc>
+    <lastmod>2026-04-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="el" href="https://i-smile.gr/index.html?lang=el"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://i-smile.gr/index.html?lang=en"/>
+  </url>
+  <url>
+    <loc>https://i-smile.gr/whitening.html</loc>
+    <lastmod>2026-04-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="el" href="https://i-smile.gr/whitening.html?lang=el"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://i-smile.gr/whitening.html?lang=en"/>
+  </url>
+  <url>
+    <loc>https://i-smile.gr/veneers.html</loc>
+    <lastmod>2026-04-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="el" href="https://i-smile.gr/veneers.html?lang=el"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://i-smile.gr/veneers.html?lang=en"/>
+  </url>
+  <url>
+    <loc>https://i-smile.gr/aligners.html</loc>
+    <lastmod>2026-04-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="el" href="https://i-smile.gr/aligners.html?lang=el"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://i-smile.gr/aligners.html?lang=en"/>
+  </url>
+  <url>
+    <loc>https://i-smile.gr/book.html</loc>
+    <lastmod>2026-04-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="el" href="https://i-smile.gr/book.html?lang=el"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://i-smile.gr/book.html?lang=en"/>
+  </url>
+</urlset>

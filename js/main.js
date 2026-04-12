@@ -5,7 +5,12 @@
 // language toggle, scroll reveals, mobile menu
 // ============================================
 
-let currentLang = localStorage.getItem('ismile-lang') || 'el';
+// Language handling (Priority: URL ?lang= > localStorage > default 'el')
+const urlParams = new URLSearchParams(window.location.search);
+let currentLang = urlParams.get('lang') || localStorage.getItem('ismile-lang') || 'el';
+// Ensure only supported languages are used
+if (!['el', 'en'].includes(currentLang)) currentLang = 'el';
+localStorage.setItem('ismile-lang', currentLang);
 
 // ── Shared Header HTML ──
 function getHeaderHTML() {
@@ -149,23 +154,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const langBtn = document.getElementById("lang-toggle");
     if (langBtn) {
         langBtn.addEventListener("click", () => {
-            currentLang = currentLang === 'el' ? 'en' : 'el';
-            langBtn.textContent = currentLang === 'el' ? 'EN' : 'EL';
-            document.documentElement.lang = currentLang;
-            localStorage.setItem('ismile-lang', currentLang);
-
-            // Update all translatable elements
-            document.querySelectorAll("[data-i18n]").forEach(el => {
-                const key = el.getAttribute("data-i18n");
-                if (translations[currentLang][key]) {
-                    el.innerHTML = translations[currentLang][key];
-                }
-            });
-
-            // Update dynamic booking elements if present
-            if (window.onLanguageChange) {
-                window.onLanguageChange();
-            }
+            const nextLang = currentLang === 'el' ? 'en' : 'el';
+            const newUrl = new URL(window.location.href);
+            newUrl.searchParams.set('lang', nextLang);
+            window.location.href = newUrl.toString();
         });
     }
 

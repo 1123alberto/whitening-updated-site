@@ -4,9 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>i-smile | Αισθητική Οδοντιατρική</title>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+    <title>i-smile | Αισθητική Οδοντιατρική — Παλαιό Φάληρο</title>
     <meta name="description"
         content="Εξειδικευμένες υπηρεσίες αισθητικής οδοντιατρικής — λεύκανση, όψεις πορσελάνης και διάφανοι νάρθηκες — στο Παλαιό Φάληρο.">
+    <link rel="canonical" href="https://i-smile.gr/index.html">
+    <link rel="alternate" hreflang="el" href="https://i-smile.gr/index.html?lang=el">
+    <link rel="alternate" hreflang="en" href="https://i-smile.gr/index.html?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://i-smile.gr/index.html">
+
+    <!-- Social Metadata (Open Graph) -->
+    <meta property="og:site_name" content="i-smile">
+    <meta property="og:title" content="i-smile | Αισθητική Οδοντιατρική — Παλαιό Φάληρο">
+    <meta property="og:description" content="Εξειδικευμένες υπηρεσίες αισθητικής οδοντιατρικής — λεύκανση, όψεις πορσελάνης και διάφανοι νάρθηκες — στο Παλαιό Φάληρο.">
+    <meta property="og:image" content="https://i-smile.gr/assets/images/hero-smile.jpg">
+    <meta property="og:url" content="https://i-smile.gr/index.html">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="i-smile | Αισθητική Οδοντιατρική — Παλαιό Φάληρο">
+    <meta name="twitter:description" content="Κορυφαίες υπηρεσίες αισθητικής οδοντιατρικής στο Παλαιό Φάληρο. Λεύκανση, Όψεις, Aligners.">
+    <meta name="twitter:image" content="https://i-smile.gr/assets/images/hero-smile.jpg">
 
     <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,6 +35,62 @@
     <link href="https://fonts.googleapis.com/css2?family=Passions+Conflict&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Dentist",
+      "name": "i-smile | Αισθητική Οδοντιατρική",
+      "image": "https://i-smile.gr/assets/images/hero-smile.jpg",
+      "@id": "https://i-smile.gr/#dentist",
+      "url": "https://i-smile.gr",
+      "telephone": "+302109312651",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Πλατεία Ντάβαρη 2",
+        "addressLocality": "Παλαιό Φάληρο",
+        "postalCode": "17563",
+        "addressCountry": "GR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 37.923812,
+        "longitude": 23.693437
+      },
+      "hasMap": "https://www.google.com/maps?cid=4799808061811027853",
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "10:00",
+          "closes": "20:00"
+        }
+      ],
+      "priceRange": "$$",
+      "sameAs": [
+        "https://dentplant.gr"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Αρχική",
+        "item": "https://i-smile.gr/index.html"
+      }]
+    }
+    </script>
 </head>
 
 <body>
@@ -39,7 +115,7 @@
                     </div>
                 </div>
                 <div class="hero-image-wrapper reveal delay-1">
-                    <img src="assets/images/hero-smile.jpg" alt="Beautiful confident smile" class="hero-image">
+                    <img src="assets/images/hero-smile.jpg" alt="Εντυπωσιακό, υγιές χαμόγελο στο i-smile Παλαιό Φάληρο" class="hero-image">
                 </div>
             </div>
         </section>
@@ -57,7 +133,7 @@
                     <!-- Whitening Card -->
                     <a href="whitening.html" class="service-card reveal">
                         <div class="service-card-image">
-                            <img src="assets/images/whitening-hero.png" alt="Teeth Whitening">
+                            <img src="assets/images/whitening-hero.png" alt="Λεύκανση Δοντιών με LED στο i-smile">
                         </div>
                         <div class="service-card-body">
                             <div class="service-card-icon">
@@ -91,7 +167,7 @@
                     <!-- Veneers Card -->
                     <a href="veneers.html" class="service-card reveal delay-1">
                         <div class="service-card-image">
-                            <img src="assets/images/veneers-hero.png" alt="Porcelain Veneers">
+                            <img src="assets/images/veneers-hero.png" alt="Όψεις Πορσελάνης για τέλειο χαμόγελο">
                         </div>
                         <div class="service-card-body">
                             <div class="service-card-icon">
@@ -119,7 +195,7 @@
                     <!-- Aligners Card -->
                     <a href="aligners.html" class="service-card reveal delay-2">
                         <div class="service-card-image">
-                            <img src="assets/images/aligners-hero.png" alt="Clear Aligners">
+                            <img src="assets/images/aligners-hero.png" alt="Αόρατη ορθοδοντική με διάφανους νάρθηκες">
                         </div>
                         <div class="service-card-body">
                             <div class="service-card-icon">
