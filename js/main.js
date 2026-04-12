@@ -27,7 +27,7 @@ function getHeaderHTML() {
     return `
     <div class="container d-flex align-center justify-between">
         <a href="index.html" class="text-logo">
-            <span class="logo-cursive">i-smile</span>
+            <span class="logo-cursive">i<span class="logo-hyphen">-</span>smile</span>
             <span class="logo-subtitle">COSMETIC DENTISTRY</span>
         </a>
 
@@ -56,7 +56,7 @@ function getFooterHTML() {
     <div class="container footer-grid">
         <div class="footer-col brand-col">
             <a href="index.html" class="text-logo footer-logo mb-3">
-                <span class="logo-cursive">i-smile</span>
+                <span class="logo-cursive">i<span class="logo-hyphen">-</span>smile</span>
                 <span class="logo-subtitle">COSMETIC DENTISTRY</span>
             </a>
             <p class="footer-about" data-i18n="footer_about">${t.footer_about}</p>
