@@ -508,14 +508,18 @@ ul {
 }
 
 .booking-hero-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     align-items: flex-start;
+    width: 100%;
+    gap: 4rem;
 }
 
 .booking-hero-content {
+    flex: 1 1 400px;
     text-align: left;
+    max-width: 100%;
 }
 
 .booking-hero-content .hero-title {
@@ -533,8 +537,10 @@ ul {
 }
 
 .booking-hero-widget {
+    flex: 1 1 450px;
     display: flex;
     justify-content: flex-end;
+    max-width: 100%;
 }
 
 .booking-hero-widget .booking-widget {
@@ -565,8 +571,9 @@ ul {
         min-height: auto;
     }
     .booking-hero-grid {
-        grid-template-columns: 1fr;
-        text-align: center;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         gap: 2rem;
     }
     .booking-hero-content {
@@ -582,6 +589,9 @@ ul {
     .booking-hero-widget {
         justify-content: center;
         width: 100%;
+    }
+    .booking-hero-widget .booking-widget {
+        margin: 0 auto;
     }
 }
 
