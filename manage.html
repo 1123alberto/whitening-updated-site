@@ -4,7 +4,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>i-smile | Manage Appointment</title>
+  <link rel="alternate" hreflang="el" href="https://i-smile.gr/manage.html?lang=el">
+  <link rel="alternate" hreflang="en" href="https://i-smile.gr/manage.html?lang=en">
+  <title>Διαχείριση Ραντεβού Παλαιό Φάληρο | i-smile</title>
+  <meta name="description" content="Διαχειριστείτε το ραντεβού σας στο i-smile Παλαιό Φάληρο.">
+  <!-- Social Metadata (Open Graph) -->
+  <meta property="og:site_name" content="i-smile">
+  <meta property="og:title" content="Διαχείριση Ραντεβού Παλαιό Φάληρο | i-smile">
+  <meta property="og:description" content="Διαχειριστείτε το ραντεβού σας στο i-smile Παλαιό Φάληρο.">
+  <meta property="og:image" content="https://i-smile.gr/assets/images/cta-bg.png">
+  <meta property="og:url" content="https://i-smile.gr/manage.html">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card Metadata -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Διαχείριση Ραντεβού Παλαιό Φάληρο | i-smile">
+  <meta name="twitter:description" content="Διαχειριστείτε το ραντεβού σας στο i-smile Παλαιό Φάληρο.">
+  <meta name="twitter:image" content="https://i-smile.gr/assets/images/cta-bg.png">
 
   <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -228,7 +244,7 @@
 
     <!-- Error State -->
     <div id="error-state" class="hidden">
-      <h1 id="error-title">Appointment Not Found</h1>
+      <h2 id="error-title">Appointment Not Found</h2>
       <p class="subtitle">Το ραντεβού δεν βρέθηκε ή έχει ήδη ακυρωθεί.</p>
       <a href="index.html" class="btn btn-primary" style="display: block;">Go to Homepage</a>
     </div>
@@ -262,7 +278,7 @@
 
     <!-- Confirm Cancel -->
     <div id="cancel-confirm-state" class="hidden">
-      <h1>Are you sure?</h1>
+      <h2>Are you sure?</h2>
       <p class="subtitle">Θέλετε να ακυρώσετε το ραντεβού σας; Αυτή η ενέργεια δεν αναιρείται.</p>
       <div class="actions">
         <button id="final-cancel-btn" class="btn btn-outline" style="background: #ef4444; color: white;">Yes, Cancel
@@ -274,7 +290,7 @@
     <!-- Success State -->
     <div id="success-state" class="hidden">
       <div class="success-icon">✓</div>
-      <h1>Canceled</h1>
+      <h2>Canceled</h2>
       <p class="subtitle">Το ραντεβού σας ακυρώθηκε επιτυχώς.</p>
       <a href="index.html" class="btn btn-primary" style="display: block;">Return Home</a>
     </div>

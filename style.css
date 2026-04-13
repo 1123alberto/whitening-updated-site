@@ -1166,6 +1166,83 @@ ul {
 
 
 /* ==========================================
+   Dentist Section
+   ========================================== */
+.dentist-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.dentist-image {
+    position: relative;
+}
+
+.dentist-image .placeholder-img {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 30px 60px -10px rgba(0,0,0,0.15);
+    background-color: var(--clr-bg-alt);
+    aspect-ratio: 4/5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dentist-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.1);
+    transition: var(--transition);
+}
+
+.dentist-image:hover img {
+    filter: grayscale(0%) contrast(1);
+}
+
+.dentist-content h2 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--clr-brand-purple);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.dentist-name {
+    font-size: clamp(1.85rem, 4.2vw, 3.5rem);
+    margin-bottom: 1.5rem;
+    font-family: var(--font-display);
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.dentist-bio {
+    font-size: 1.125rem;
+    color: var(--clr-mid-gray);
+    line-height: 1.8;
+    font-weight: 300;
+}
+
+@media (max-width: 900px) {
+    .dentist-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        text-align: center;
+    }
+    .dentist-image {
+        max-width: 350px;
+        margin: 0 auto;
+    }
+    .dentist-name {
+        font-size: clamp(1.5rem, 8vw, 2.5rem);
+    }
+}
+
+
+/* ==========================================
    Reveal Animations
    ========================================== */
 
@@ -1664,6 +1741,59 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.privacy-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+}
+
+.privacy-table th, 
+.privacy-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--clr-light-gray);
+    text-align: left;
+}
+
+.privacy-table th {
+    background-color: #f9f9f9;
+    font-weight: 600;
+}
+
+.privacy-table tr:last-child td {
+    border-bottom: none;
+}
+
+@media (max-width: 600px) {
+    .privacy-table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+.content-block h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--clr-dark-gray);
+}
+
+.content-block h3 {
+    font-size: 1.25rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--clr-mid-gray);
+}
+
+.content-block ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.content-block li {
+    margin-bottom: 0.5rem;
 }
 
 .testimonial-card:hover {

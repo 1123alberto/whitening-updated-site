@@ -13,6 +13,12 @@ if (!['el', 'en'].includes(currentLang)) currentLang = 'el';
 localStorage.setItem('ismile-lang', currentLang);
 document.documentElement.lang = currentLang; // Immediate SEO signal update
 
+// ── Helper: Localize Internal Links ──
+function localizeHref(href) {
+    if (!href || href.startsWith('#') || href.startsWith('http') || currentLang === 'el') return href;
+    return href.includes('?') ? `${href}&lang=${currentLang}` : `${href}?lang=${currentLang}`;
+}
+
 // ── Shared Header HTML ──
 function getHeaderHTML() {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
@@ -26,13 +32,13 @@ function getHeaderHTML() {
 
     const navLinks = navItems.map(item => {
         const isActive = currentPage === item.href ? ' class="active"' : '';
-        const href = item.href.startsWith('#') ? item.href : item.href;
+        const href = localizeHref(item.href);
         return `<a href="${href}"${isActive} data-i18n="${item.key}">${translations[currentLang][item.key]}</a>`;
     }).join('\n                ');
 
     return `
     <div class="container d-flex align-center justify-between">
-        <a href="index.html" class="text-logo">
+        <a href="${localizeHref('index.html')}" class="text-logo">
             <span class="logo-cursive">i<span class="logo-hyphen">-</span>smile</span>
             <span class="logo-subtitle">COSMETIC DENTISTRY</span>
         </a>
@@ -43,7 +49,7 @@ function getHeaderHTML() {
 
         <div class="header-actions">
             <button id="lang-toggle" class="lang-btn" aria-label="Switch Language">${currentLang === 'el' ? 'EN' : 'EL'}</button>
-            <a href="book.html" class="btn btn-primary" data-i18n="book_now">${translations[currentLang].book_now}</a>
+            <a href="${localizeHref('book.html')}" class="btn btn-primary" data-i18n="book_now">${translations[currentLang].book_now}</a>
             <button class="mobile-menu-btn" aria-label="Open Navigation Menu">
                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
                     <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -61,7 +67,7 @@ function getFooterHTML() {
     return `
     <div class="container footer-grid">
         <div class="footer-col brand-col">
-            <a href="index.html" class="text-logo footer-logo mb-3">
+            <a href="${localizeHref('index.html')}" class="text-logo footer-logo mb-3">
                 <span class="logo-cursive">i<span class="logo-hyphen">-</span>smile</span>
                 <span class="logo-subtitle">COSMETIC DENTISTRY</span>
             </a>
@@ -108,19 +114,22 @@ function getFooterHTML() {
             <span data-i18n="afm_text">${t.afm_text}</span> | 
             <a href="https://www.osp.gr/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;" data-i18n="affiliation_text">${t.affiliation_text}</a>
         </p>
-        <p>&copy; <span id="year"></span> <a href="https://dentplant.gr" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: inherit; pointer-events: auto;">A Dentplant Clinic</a>. <span data-i18n="rights">${t.rights}</span> | <a href="privacy.html" style="color: inherit; text-decoration: underline;" data-i18n="privacy_policy">${t.privacy_policy}</a></p>
+        <p>&copy; <span id="year"></span> <a href="https://dentplant.gr" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: inherit; pointer-events: auto;">A Dentplant Clinic</a>. <span data-i18n="rights">${t.rights}</span> | <a href="${localizeHref('privacy.html')}" style="color: inherit; text-decoration: underline;" data-i18n="privacy_policy">${t.privacy_policy}</a></p>
     </div>`;
 }
 
 // ── Metadata Localization ──
 function applyMetadataLocalization() {
     const path = window.location.pathname;
+    const filename = path.split('/').pop() || 'index.html';
     let page = 'index';
 
-    if (path.includes('whitening')) page = 'whitening';
-    else if (path.includes('veneers')) page = 'veneers';
-    else if (path.includes('aligners')) page = 'aligners';
-    else if (path.includes('book')) page = 'book';
+    if (filename.includes('whitening')) page = 'whitening';
+    else if (filename.includes('veneers')) page = 'veneers';
+    else if (filename.includes('aligners')) page = 'aligners';
+    else if (filename.includes('book')) page = 'book';
+    else if (filename.includes('privacy')) page = 'privacy';
+    else if (filename.includes('manage')) page = 'manage';
 
     const meta = translations[currentLang].meta[page];
     if (meta) {
@@ -165,15 +174,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.documentElement.lang = currentLang;
 
     // ── Apply stored language to all elements on load ──
-    // HTML is authored in Greek; if user previously selected English, translate everything
-    if (currentLang !== 'el') {
-        document.querySelectorAll("[data-i18n]").forEach(el => {
-            const key = el.getAttribute("data-i18n");
-            if (translations[currentLang][key]) {
-                el.innerHTML = translations[currentLang][key];
-            }
-        });
-    }
+    // Inject translations from i18n.js for all elements with data-i18n
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (translations[currentLang] && translations[currentLang][key]) {
+            el.innerHTML = translations[currentLang][key];
+        }
+    });
+
 
     // Apply localized metadata
     applyMetadataLocalization();
