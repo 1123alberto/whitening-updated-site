@@ -11,6 +11,7 @@ let currentLang = urlParams.get('lang') || localStorage.getItem('ismile-lang') |
 // Ensure only supported languages are used
 if (!['el', 'en'].includes(currentLang)) currentLang = 'el';
 localStorage.setItem('ismile-lang', currentLang);
+document.documentElement.lang = currentLang; // Immediate SEO signal update
 
 // ── Shared Header HTML ──
 function getHeaderHTML() {
@@ -41,9 +42,9 @@ function getHeaderHTML() {
         </nav>
 
         <div class="header-actions">
-            <button id="lang-toggle" class="lang-btn">${currentLang === 'el' ? 'EN' : 'EL'}</button>
+            <button id="lang-toggle" class="lang-btn" aria-label="Switch Language">${currentLang === 'el' ? 'EN' : 'EL'}</button>
             <a href="book.html" class="btn btn-primary" data-i18n="book_now">${translations[currentLang].book_now}</a>
-            <button class="mobile-menu-btn" aria-label="Toggle menu">
+            <button class="mobile-menu-btn" aria-label="Open Navigation Menu">
                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
                     <line x1="3" y1="12" x2="21" y2="12"></line>
                     <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -103,7 +104,7 @@ function getFooterHTML() {
         </div>
     </div>
     <div class="footer-bottom text-center">
-        <p>&copy; <span id="year"></span> <a href="https://dentplant.gr" style="color: inherit; text-decoration: none; cursor: inherit; pointer-events: auto;">A Dentplant Clinic</a>. <span data-i18n="rights">${t.rights}</span></p>
+        <p>&copy; <span id="year"></span> <a href="https://dentplant.gr" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: inherit; pointer-events: auto;">A Dentplant Clinic</a>. <span data-i18n="rights">${t.rights}</span></p>
     </div>`;
 }
 
