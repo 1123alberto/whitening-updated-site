@@ -194,6 +194,30 @@ const translations = {
         address_text: "Πλατεία Ντάβαρη 2, Παλαιό Φάληρο",
         rights: "All rights reserved.",
 
+        // ── Metadata ──
+        meta: {
+            index: {
+                title: "i-smile | Αισθητική Οδοντιατρική — Παλαιό Φάληρο",
+                desc: "Εξειδικευμένες υπηρεσίες αισθητικής οδοντιατρικής — λεύκανση, όψεις πορσελάνης και διάφανοι νάρθηκες — στο Παλαιό Φάληρο."
+            },
+            whitening: {
+                title: "i-smile | Λεύκανση Δοντιών — Παλαιό Φάληρο",
+                desc: "Επαγγελματική λεύκανση δοντιών με Blue Spectrum LED σε μόλις 90 λεπτά. Ανώδυνα, γρήγορα, με εντυπωσιακά αποτελέσματα στο Παλαιό Φάληρο."
+            },
+            veneers: {
+                title: "i-smile | Όψεις Πορσελάνης — Παλαιό Φάληρο",
+                desc: "Χειροποίητες όψεις πορσελάνης για ένα μόνιμα τέλειο, φυσικό χαμόγελο. Τοποθέτηση σε μόλις δύο ραντεβού στο Παλαιό Φάληρο."
+            },
+            aligners: {
+                title: "i-smile | Διάφανοι Νάρθηκες — Παλαιό Φάληρο",
+                desc: "Αόρατη ορθοδοντική θεραπεία με διάφανους νάρθηκες. Ισιώστε τα δόντια σας χωρίς μεταλλικά σιδεράκια στο Παλαιό Φάληρο."
+            },
+            book: {
+                title: "i-smile | Κλείστε Ραντεβού — Παλαιό Φάληρο",
+                desc: "Κλείστε online ραντεβού για λεύκανση, όψεις ή νάρθηκες στο Παλαιό Φάληρο. Επιλέξτε υπηρεσία, ημερομηνία και ώρα."
+            }
+        },
+
         // ── Misc ──
         learn_more: "Μάθετε Περισσότερα",
         free_consult: "Δωρεάν Αξιολόγηση",
@@ -386,6 +410,30 @@ const translations = {
         closed: "Closed",
         address_text: "Plateia Ntavari 2, Palaio Faliro",
         rights: "All rights reserved.",
+
+        // ── Metadata ──
+        meta: {
+            index: {
+                title: "i-smile | Cosmetic Dentistry — Palaio Faliro",
+                desc: "Specialized cosmetic dentistry services — whitening, porcelain veneers, and clear aligners — in Palaio Faliro."
+            },
+            whitening: {
+                title: "i-smile | Teeth Whitening — Palaio Faliro",
+                desc: "Professional teeth whitening with Blue Spectrum LED in just 90 minutes. Painless, fast, with impressive results in Palaio Faliro."
+            },
+            veneers: {
+                title: "i-smile | Porcelain Veneers — Palaio Faliro",
+                desc: "Handcrafted porcelain veneers for a permanently perfect, natural smile. Placement in just two appointments in Palaio Faliro."
+            },
+            aligners: {
+                title: "i-smile | Clear Aligners — Palaio Faliro",
+                desc: "Invisible orthodontic treatment with clear aligners. Straighten your teeth without metal brackets in Palaio Faliro."
+            },
+            book: {
+                title: "i-smile | Book an Appointment — Palaio Faliro",
+                desc: "Book an online appointment for whitening, veneers, or aligners in Palaio Faliro. Select service, date, and time."
+            }
+        },
 
         // ── Misc ──
         learn_more: "Learn More",

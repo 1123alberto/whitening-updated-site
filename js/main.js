@@ -107,6 +107,41 @@ function getFooterHTML() {
     </div>`;
 }
 
+// ── Metadata Localization ──
+function applyMetadataLocalization() {
+    const path = window.location.pathname;
+    let page = 'index';
+
+    if (path.includes('whitening')) page = 'whitening';
+    else if (path.includes('veneers')) page = 'veneers';
+    else if (path.includes('aligners')) page = 'aligners';
+    else if (path.includes('book')) page = 'book';
+
+    const meta = translations[currentLang].meta[page];
+    if (meta) {
+        // Document Title
+        document.title = meta.title;
+
+        // Meta Description
+        const descEl = document.querySelector('meta[name="description"]');
+        if (descEl) descEl.setAttribute('content', meta.desc);
+
+        // Social Metadata (Open Graph)
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) ogTitle.setAttribute('content', meta.title);
+
+        const ogDesc = document.querySelector('meta[property="og:description"]');
+        if (ogDesc) ogDesc.setAttribute('content', meta.desc);
+
+        // Twitter Card
+        const twTitle = document.querySelector('meta[name="twitter:title"]');
+        if (twTitle) twTitle.setAttribute('content', meta.title);
+
+        const twDesc = document.querySelector('meta[name="twitter:description"]');
+        if (twDesc) twDesc.setAttribute('content', meta.desc);
+    }
+}
+
 // ── Initialize Shared Components ──
 document.addEventListener("DOMContentLoaded", () => {
     // Inject Header
@@ -134,6 +169,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
+    // Apply localized metadata
+    applyMetadataLocalization();
 
     // ── Mobile Menu Toggle ──
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
