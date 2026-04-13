@@ -23,7 +23,18 @@ const translations = {
 
         // ── Homepage Services ──
         services_title: "Οι Θεραπείες μας",
-        services_desc: "Τρεις εξειδικευμένες υπηρεσίες σχεδιασμένες για να αναδείξουν το χαμόγελό σας.",
+        services_desc: "Τρεις εξειδικευμένες υπηρεσίες σχεδιασμένης ποιότητας για να αναδείξουν το χαμόγελό σας στο Παλαιό Φάληρο.",
+
+        // ── Testimonials ──
+        testimonials_title: "Τι λένε οι ασθενείς μας",
+        testimonials_desc: "Η εμπιστοσύνη σας είναι η μεγαλύτερη ανταμοιβή μας. Δείτε τις εμπειρίες των ανθρώπων που μας επέλεξαν.",
+        test1_text: "Είμαι εξαιρετικά ευχαριστημένη, πολύ απαλό άγγιγμα, δεν ένιωσα πόνο και ένιωσα σιγουριά με την εκτεταμένη εργασία που χρειαζόμουν (όψεις σε όλο το στόμα). Πολύ επαγγελματίας και ειλικρινής, το συνιστώ ανεπιφύλακτα.",
+        test1_author: "jojo jojos",
+        test2_text: "Επαγγελματίας και πολύ εξυπηρετικός γιατρός! Τον συνιστώ ανεπιφύλακτα.",
+        test2_author: "aysel kdeiss",
+        test3_text: "Είχα ένα δύσκολο οδοντιατρικό περιστατικό και ο γιατρός με υπομονή, επαγγελματισμό και ειλικρινές ενδιαφέρον κατάφερε να πετύχει ένα πάρα πολύ καλό αποτέλεσμα.",
+        test3_author: "ΕΥΓΕΝΙΑ ΛΙΑΓΚΟΥ",
+        view_on_google: "Δείτε περισσότερα στο Google Maps",
 
         svc_whitening_title: "Λεύκανση Δοντιών",
         svc_whitening_desc: "Άμεσα αποτελέσματα σε μόλις 90 λεπτά χάρη στην προηγμένη τεχνολογία Blue Spectrum LED.",
@@ -191,29 +202,44 @@ const translations = {
         sun: "Κυριακή:",
         sat_hours: "Μόνο τηλεφωνικά",
         closed: "Κλειστά",
-        address_text: "Πλατεία Ντάβαρη 2, Παλαιό Φάληρο",
+        address_text: "Πλατεία Ντάβαρη 2, Παλαιό Φάληρο, 17564",
         rights: "All rights reserved.",
+        afm_text: "ΑΦΜ: 077118016",
+        affiliation_text: "Μέλος του Οδοντιατρικού Συλλόγου Πειραιώς (OSP)",
+        privacy_policy: "Πολιτική Απορρήτου",
+        privacy_title1: "1. Συλλογή Δεδομένων",
+        privacy_desc1: "Στο i-smile.gr, σεβόμαστε το απόρρητό σας. Συλλέγουμε μόνο τα απαραίτητα δεδομένα που μας παρέχετε μέσω της φόρμας κράτησης (όνομα, email, τηλέφωνο) αποκλειστικά για τον προγραμματισμό και την επιβεβαίωση των ραντεβού σας.",
+        privacy_title2: "2. Χρήση Πληροφοριών",
+        privacy_desc2: "Οι πληροφορίες σας χρησιμοποιούνται μόνο για την επιβεβαίωση των ραντεβού σας, την επικοινωνία μαζί σας για τυχόν αλλαγές στο πρόγραμμα, και την παροχή των ζητούμενων οδοντιατρικών υπηρεσιών.",
+        privacy_title3: "3. Προστασία Δεδομένων",
+        privacy_desc3: "Δεν μοιραζόμαστε, δεν πουλάμε και δεν ενοικιάζουμε τα προσωπικά σας δεδομένα σε τρίτους. Η πρόσβαση στα στοιχεία σας περιορίζεται μόνο στο εξουσιοδοτημένο προσωπικό του ιατρείου μας.",
+        privacy_title4: "4. Τα Δικαιώματά σας",
+        privacy_desc4: "Σύμφωνα με τον GDPR, έχετε το δικαίωμα πρόσβασης, διόρθωσης ή διαγραφής των προσωπικών σας δεδομένων. Μπορείτε να επικοινωνήσετε μαζί μας ανά πάσα στιγμή για να ασκήσετε αυτά τα δικαιώματα.",
+        privacy_title5: "5. Cookies",
+        privacy_desc5: "Ο ιστότοπός μας χρησιμοποιεί βασικά cookies για τη βελτίωση της εμπειρίας πλοήγησης και τη λειτουργία του συστήματος κρατήσεων.",
+        privacy_title6: "6. Επικοινωνία",
+        privacy_desc6: "Για οποιαδήποτε απορία σχετικά με την παρούσα πολιτική, μπορείτε να επικοινωνήσετε μαζί μας στο 210 931 2651 ή να μας επισκεφθείτε στην Πλατεία Ντάβαρη 2, Παλαιό Φάληρο.",
 
         // ── Metadata ──
         meta: {
             index: {
-                title: "i-smile | Αισθητική Οδοντιατρική — Παλαιό Φάληρο",
-                desc: "Εξειδικευμένες υπηρεσίες αισθητικής οδοντιατρικής — λεύκανση, όψεις πορσελάνης και διάφανοι νάρθηκες — στο Παλαιό Φάληρο."
+                title: "i-smile | Αισθητική Οδοντιατρική — Παλαιό Φάληρο — Άγγελος Μοσχόπουλος",
+                desc: "Κορυφαία αισθητική οδοντιατρική στο Παλαιό Φάληρο. Λεύκανση, όψεις πορσελάνης και διάφανοι νάρθηκες από τον χειρουργό οδοντίατρο Άγγελο Μοσχόπουλο."
             },
             whitening: {
-                title: "i-smile | Λεύκανση Δοντιών — Παλαιό Φάληρο",
+                title: "Λεύκανση Δοντιών Παλαιό Φάληρο | i-smile",
                 desc: "Επαγγελματική λεύκανση δοντιών με Blue Spectrum LED σε μόλις 90 λεπτά. Ανώδυνα, γρήγορα, με εντυπωσιακά αποτελέσματα στο Παλαιό Φάληρο."
             },
             veneers: {
-                title: "i-smile | Όψεις Πορσελάνης — Παλαιό Φάληρο",
+                title: "Όψεις Πορσελάνης Παλαιό Φάληρο | i-smile",
                 desc: "Χειροποίητες όψεις πορσελάνης για ένα μόνιμα τέλειο, φυσικό χαμόγελο. Τοποθέτηση σε μόλις δύο ραντεβού στο Παλαιό Φάληρο."
             },
             aligners: {
-                title: "i-smile | Διάφανοι Νάρθηκες — Παλαιό Φάληρο",
+                title: "Διάφανοι Νάρθηκες Παλαιό Φάληρο | i-smile",
                 desc: "Αόρατη ορθοδοντική θεραπεία με διάφανους νάρθηκες. Ισιώστε τα δόντια σας χωρίς μεταλλικά σιδεράκια στο Παλαιό Φάληρο."
             },
             book: {
-                title: "i-smile | Κλείστε Ραντεβού — Παλαιό Φάληρο",
+                title: "Κλείστε Ραντεβού | i-smile Παλαιό Φάληρο",
                 desc: "Κλείστε online ραντεβού για λεύκανση, όψεις ή νάρθηκες στο Παλαιό Φάληρο. Επιλέξτε υπηρεσία, ημερομηνία και ώρα."
             }
         },
@@ -240,7 +266,18 @@ const translations = {
 
         // ── Homepage Services ──
         services_title: "Our Treatments",
-        services_desc: "Three specialized services designed to transform your smile.",
+        services_desc: "Three specialized services designed to transform your smile in Palaio Faliro.",
+
+        // ── Testimonials ──
+        testimonials_title: "What our patients say",
+        testimonials_desc: "Your trust is our greatest reward. See the experiences of people who chose us.",
+        test1_text: "I am extremely pleased, very gentle touch, i felt no pain and confident with the extensive work that i needed (full mouth veneers). Very professional and honest, highly recommend",
+        test1_author: "jojo jojos",
+        test2_text: "Professional and very helpful doctor! Highly recommended",
+        test2_author: "aysel kdeiss",
+        test3_text: "I had a difficult dental case and the doctor, with patience, professionalism and genuine interest, managed to achieve a very good result.",
+        test3_author: "ΕΥΓΕΝΙΑ ΛΙΑΓΚΟΥ",
+        view_on_google: "View more on Google Maps",
 
         svc_whitening_title: "Teeth Whitening",
         svc_whitening_desc: "Instant results in just 90 minutes with advanced Blue Spectrum LED technology.",
@@ -408,29 +445,44 @@ const translations = {
         sun: "Sunday:",
         sat_hours: "By phone only",
         closed: "Closed",
-        address_text: "Plateia Ntavari 2, Palaio Faliro",
+        address_text: "Plateia Ntavari 2, Palaio Faliro, 17564",
         rights: "All rights reserved.",
+        afm_text: "VAT: 077118016",
+        affiliation_text: "Member of the Piraeus Dental Association (OSP)",
+        privacy_policy: "Privacy Policy",
+        privacy_title1: "1. Data Collection",
+        privacy_desc1: "At i-smile.gr, we respect your privacy. We only collect the necessary data you provide through the booking form (name, email, phone) exclusively for scheduling and confirming your appointments.",
+        privacy_title2: "2. Use of Information",
+        privacy_desc2: "Your information is used only to confirm your appointments, communicate with you regarding any schedule changes, and provide the requested dental services.",
+        privacy_title3: "3. Data Protection",
+        privacy_desc3: "We do not share, sell, or rent your personal data to third parties. Access to your information is restricted to authorized personnel of our clinic only.",
+        privacy_title4: "4. Your Rights",
+        privacy_desc4: "According to the GDPR, you have the right to access, correct, or delete your personal data. You can contact us at any time to exercise these rights.",
+        privacy_title5: "5. Cookies",
+        privacy_desc5: "Our website uses essential cookies to improve your browsing experience and the operation of the booking system.",
+        privacy_title6: "6. Contact",
+        privacy_desc6: "For any questions regarding this policy, you can contact us at +30 210 931 2651 or visit us at Plateia Ntavari 2, Palaio Faliro.",
 
         // ── Metadata ──
         meta: {
             index: {
-                title: "i-smile | Cosmetic Dentistry — Palaio Faliro",
-                desc: "Specialized cosmetic dentistry services — whitening, porcelain veneers, and clear aligners — in Palaio Faliro."
+                title: "i-smile | Cosmetic Dentistry — Palaio Faliro — Angelos Moschopoulos",
+                desc: "Premier cosmetic dentistry in Palaio Faliro. Teeth whitening, porcelain veneers, and clear aligners by dentist Angelos Moschopoulos."
             },
             whitening: {
-                title: "i-smile | Teeth Whitening — Palaio Faliro",
-                desc: "Professional teeth whitening with Blue Spectrum LED in just 90 minutes. Painless, fast, with impressive results in Palaio Faliro."
+                title: "Teeth Whitening Palaio Faliro | i-smile",
+                desc: "Professional teeth whitening with Blue Spectrum LED in just 90 minutes. Painless, fast, with stunning results in Palaio Faliro."
             },
             veneers: {
-                title: "i-smile | Porcelain Veneers — Palaio Faliro",
-                desc: "Handcrafted porcelain veneers for a permanently perfect, natural smile. Placement in just two appointments in Palaio Faliro."
+                title: "Porcelain Veneers Palaio Faliro | i-smile",
+                desc: "Handcrafted porcelain veneers for a permanently perfect, natural smile. Treatment in just two appointments in Palaio Faliro."
             },
             aligners: {
-                title: "i-smile | Clear Aligners — Palaio Faliro",
+                title: "Clear Aligners Palaio Faliro | i-smile",
                 desc: "Invisible orthodontic treatment with clear aligners. Straighten your teeth without metal brackets in Palaio Faliro."
             },
             book: {
-                title: "i-smile | Book an Appointment — Palaio Faliro",
+                title: "Book Appointment | i-smile Palaio Faliro",
                 desc: "Book an online appointment for whitening, veneers, or aligners in Palaio Faliro. Select service, date, and time."
             }
         },

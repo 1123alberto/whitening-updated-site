@@ -104,7 +104,11 @@ function getFooterHTML() {
         </div>
     </div>
     <div class="footer-bottom text-center">
-        <p>&copy; <span id="year"></span> <a href="https://dentplant.gr" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: inherit; pointer-events: auto;">A Dentplant Clinic</a>. <span data-i18n="rights">${t.rights}</span></p>
+        <p class="mb-2" style="font-size: 0.85rem; color: var(--clr-mid-gray);">
+            <span data-i18n="afm_text">${t.afm_text}</span> | 
+            <a href="https://www.osp.gr/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;" data-i18n="affiliation_text">${t.affiliation_text}</a>
+        </p>
+        <p>&copy; <span id="year"></span> <a href="https://dentplant.gr" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: inherit; pointer-events: auto;">A Dentplant Clinic</a>. <span data-i18n="rights">${t.rights}</span> | <a href="privacy.html" style="color: inherit; text-decoration: underline;" data-i18n="privacy_policy">${t.privacy_policy}</a></p>
     </div>`;
 }
 
