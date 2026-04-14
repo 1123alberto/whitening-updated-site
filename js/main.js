@@ -120,13 +120,13 @@ function getFooterHTML() {
             <ul class="credentials-list" style="font-size: 0.85rem; color: var(--clr-mid-gray); line-height: 1.6; padding-left: 1.2rem;">
                 <li class="mb-2">
                     <span data-i18n="medical_director_title">${t.medical_director_title}</span><br>
-                    <a href="https://www.linkedin.com/in/angelo-moshopoulos-a93476403/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">Dr. Angelo Moshopoulos</a>
+                    <a href="https://www.linkedin.com/in/angelo-moshopoulos-a93476403/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; border-bottom: 1px dashed rgba(0,0,0,0.2);" data-i18n="dentist_name">${t.dentist_name}</a>
                 </li>
                 <li class="mb-2">
-                    <a href="https://www.doctoranytime.gr/d/Odontiatros/moshopoulos-aggelos" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">Doctoranytime Profile</a>
+                    <a href="https://www.doctoranytime.gr/d/Odontiatros/moshopoulos-aggelos" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; border-bottom: 1px dashed rgba(0,0,0,0.2);">Doctoranytime Profile</a>
                 </li>
                 <li class="mb-2">
-                    <a href="https://www.osp.gr/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;" data-i18n="affiliation_text">${t.affiliation_text}</a>
+                    <a href="https://www.osp.gr/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; border-bottom: 1px dashed rgba(0,0,0,0.2);" data-i18n="affiliation_text">${t.affiliation_text}</a>
                 </li>
                 <li>
                     <span data-i18n="afm_text">${t.afm_text}</span>

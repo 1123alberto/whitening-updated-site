@@ -1961,4 +1961,5 @@ main {
 .credentials-list a:hover {
     color: var(--clr-brand-purple) !important;
     text-decoration: none !important;
+    border-bottom-color: var(--clr-brand-purple) !important;
 }
