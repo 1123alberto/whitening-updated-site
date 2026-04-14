@@ -65,16 +65,13 @@ function getHeaderHTML() {
 function getFooterHTML() {
     const t = translations[currentLang];
     return `
-    <div class="container footer-grid">
-        <div class="footer-col brand-col">
-            <a href="${localizeHref('index.html')}" class="text-logo footer-logo mb-3">
+    <div class="footer-grid container">
+        <div class="footer-col brand-col text-center">
+            <a href="${localizeHref('index.html')}" class="text-logo footer-logo mb-3" style="margin-inline: auto;">
                 <span class="logo-cursive">i<span class="logo-hyphen">-</span>smile</span>
                 <span class="logo-subtitle">COSMETIC DENTISTRY</span>
             </a>
-            <p class="footer-about" data-i18n="footer_about">${t.footer_about}</p>
-            <div class="footer-map-container mt-4">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3148.016335198!2d23.70132771532!3d37.93088077973!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14a1bc37b5d18049%3A0x429c5800724d6f8d!2sPlateia%20Ntavari%202%2C%20Palaio%20Faliro%20175%2064%2C%20Greece!5e0!3m2!1sen!2sgr!4v1713080000000!5m2!1sen!2sgr" width="100%" height="150" style="border:0; border-radius: 8px; filter: grayscale(1) invert(0.9);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
+            <p class="footer-about" data-i18n="footer_about" style="margin-inline: auto;">${t.footer_about}</p>
         </div>
 
         <div class="footer-col">
@@ -110,9 +107,6 @@ function getFooterHTML() {
                 <li><span class="day" data-i18n="sat">${t.sat}</span> <span class="time" data-i18n="sat_hours">${t.sat_hours}</span></li>
                 <li><span class="day" data-i18n="sun">${t.sun}</span> <span class="time" data-i18n="closed">${t.closed}</span></li>
             </ul>
-
-            <h4 data-i18n="service_areas_title">${t.service_areas_title}</h4>
-            <p class="service-areas-list" data-i18n="service_areas_list" style="font-size: 0.9rem; color: var(--clr-mid-gray); line-height: 1.4;">${t.service_areas_list}</p>
         </div>
 
         <div class="footer-col">
@@ -128,14 +122,30 @@ function getFooterHTML() {
                 <li class="mb-2">
                     <a href="https://www.osp.gr/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; border-bottom: 1px dashed rgba(0,0,0,0.2);" data-i18n="affiliation_text">${t.affiliation_text}</a>
                 </li>
-                <li>
+                <li class="mb-2">
                     <span data-i18n="afm_text">${t.afm_text}</span>
+                </li>
+                <li>
+                    <a href="${localizeHref('privacy.html')}" style="color: inherit; text-decoration: none; border-bottom: 1px dashed rgba(0,0,0,0.2);" data-i18n="privacy_policy">${t.privacy_policy}</a>
                 </li>
             </ul>
         </div>
     </div>
+
+    <div class="footer-secondary-grid container">
+        <div class="footer-map-col">
+            <div class="footer-map" style="margin-top: 0;">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3148.016335198!2d23.70132771532!3d37.93088077973!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14a1bc37b5d18049%3A0x429c5800724d6f8d!2sPlateia%20Ntavari%202%2C%20Palaio%20Faliro%20175%2064%2C%20Greece!5e0!3m2!1sen!2sgr!4v1713080000000!5m2!1sen!2sgr" width="100%" height="220" style="border:0; border-radius: 12px; filter: grayscale(1) invert(0.9);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+        <div class="footer-location-col">
+            <h4 data-i18n="service_areas_title">${t.service_areas_title}</h4>
+            <p class="service-areas-description" data-i18n="service_areas_list" style="color: var(--clr-mid-gray); line-height: 1.6;">${t.service_areas_list}</p>
+        </div>
+    </div>
+
     <div class="footer-bottom text-center">
-        <p>&copy; <span id="year"></span> <a href="https://dentplant.gr" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: inherit; pointer-events: auto;">A Dentplant Clinic</a>. <span data-i18n="rights">${t.rights}</span> | <a href="${localizeHref('privacy.html')}" style="color: inherit; text-decoration: underline;" data-i18n="privacy_policy">${t.privacy_policy}</a></p>
+        <p>&copy; <span id="year"></span> <a href="https://dentplant.gr" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: inherit; pointer-events: auto;">A Dentplant Clinic</a>. <span data-i18n="rights">${t.rights}</span></p>
     </div>`;
 }
 

@@ -195,7 +195,7 @@ const translations = {
         mon_fri: "Δευ - Παρ:",
         sat: "Σάββατο:",
         sun: "Κυριακή:",
-        sat_hours: "Μόνο τηλεφωνικά ραντεβού",
+        sat_hours: "Κλειστά",
         closed: "Κλειστά",
         address_text: "Πλατεία Ντάβαρη 2, Παλαιό Φάληρο, 17564",
         rights: "Με επιφύλαξη παντός δικαιώματος.",
@@ -204,8 +204,10 @@ const translations = {
         affiliation_text: "Μέλος Οδοντιατρικού Συλλόγου Πειραιώς (ΟΣΠ)",
         credentials_title: "Διαπιστευτήρια",
         medical_director_title: "Ιατρικός Διευθυντής:",
-        service_areas_title: "Περιοχές Εξυπηρέτησης",
-        service_areas_list: "Παλαιό Φάληρο, Άλιμος, Νέα Σμύρνη, Καλλιθέα",
+        service_areas_title: "Τοποθεσία & Πρόσβαση",
+        service_areas_list: "Κεντρικά τοποθετημένο στο Παλαιό Φάληρο για την εξυπηρέτηση της ευρύτερης Αθήνας, των Νοτίων Προαστίων (Άλιμος, Νέα Σμύρνη, Καλλιθέα) και των επισκεπτών μας από το εξωτερικό.",
+        vn_results_title: "Αποτελέσματα που Εμπνέουν",
+        vn_results_desc: "Δείτε τη μεταμόρφωση ενός χαμόγελου με τη χρήση χειροποίητων όψεων πορσελάνης. Η ακρίβεια στη λεπτομέρεια και η φυσικότητα στο αποτέλεσμα είναι η δική μας υπογραφή.",
 
         // ── Dentist Section ──
         dentist_name: "Άγγελος Μοσχόπουλος",
@@ -507,6 +509,8 @@ const translations = {
 
         vn_cta_title: "Get the smile you've always wanted",
         vn_cta_desc: "Book a consultation and learn how veneers can transform your appearance.",
+        vn_results_title: "Results that Inspire",
+        vn_results_desc: "See the transformation of a smile using handcrafted porcelain veneers. Precision in detail and natural results are our signature.",
 
         // ── Aligners Page ──
         al_hero_title: "Clear Aligners",
@@ -578,7 +582,7 @@ const translations = {
         mon_fri: "Mon - Fri:",
         sat: "Saturday:",
         sun: "Sunday:",
-        sat_hours: "Appointments by phone only",
+        sat_hours: "Closed",
         closed: "Closed",
         address_text: "Plateia Ntavari 2, Palaio Faliro, 17564",
         rights: "All rights reserved.",
@@ -587,8 +591,8 @@ const translations = {
         affiliation_text: "Member of the Piraeus Dental Association (OSP)",
         credentials_title: "Credentials",
         medical_director_title: "Medical Director:",
-        service_areas_title: "Service Areas",
-        service_areas_list: "Palaio Faliro, Alimos, Nea Smyrni, Kallithea",
+        service_areas_title: "Location & Access",
+        service_areas_list: "Centrally located in Palaio Faliro to serve Greater Athens, the Southern Suburbs (Alimos, Nea Smyrni, Kallithea), and our visitors from abroad.",
 
         privacy_body: `
             <p class="mb-4"><strong>Last updated: 13 April 2026</strong></p>
