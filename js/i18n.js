@@ -202,6 +202,10 @@ const translations = {
         privacy_policy: "Πολιτική Απορρήτου",
         afm_text: "ΑΦΜ: 077118016",
         affiliation_text: "Μέλος Οδοντιατρικού Συλλόγου Πειραιώς (ΟΣΠ)",
+        credentials_title: "Διαπιστευτήρια",
+        medical_director_title: "Ιατρικός Διευθυντής:",
+        service_areas_title: "Περιοχές Εξυπηρέτησης",
+        service_areas_list: "Παλαιό Φάληρο, Άλιμος, Νέα Σμύρνη, Καλλιθέα",
 
         // ── Dentist Section ──
         dentist_name: "Άγγελος Μοσχόπουλος",
@@ -581,6 +585,10 @@ const translations = {
         privacy_policy: "Privacy Policy",
         afm_text: "VAT: 077118016",
         affiliation_text: "Member of the Piraeus Dental Association (OSP)",
+        credentials_title: "Credentials",
+        medical_director_title: "Medical Director:",
+        service_areas_title: "Service Areas",
+        service_areas_list: "Palaio Faliro, Alimos, Nea Smyrni, Kallithea",
 
         privacy_body: `
             <p class="mb-4"><strong>Last updated: 13 April 2026</strong></p>

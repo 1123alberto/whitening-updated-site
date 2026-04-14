@@ -72,6 +72,9 @@ function getFooterHTML() {
                 <span class="logo-subtitle">COSMETIC DENTISTRY</span>
             </a>
             <p class="footer-about" data-i18n="footer_about">${t.footer_about}</p>
+            <div class="footer-map-container mt-4">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3148.016335198!2d23.70132771532!3d37.93088077973!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14a1bc37b5d18049%3A0x429c5800724d6f8d!2sPlateia%20Ntavari%202%2C%20Palaio%20Faliro%20175%2064%2C%20Greece!5e0!3m2!1sen!2sgr!4v1713080000000!5m2!1sen!2sgr" width="100%" height="150" style="border:0; border-radius: 8px; filter: grayscale(1) invert(0.9);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
         </div>
 
         <div class="footer-col">
@@ -102,18 +105,36 @@ function getFooterHTML() {
 
         <div class="footer-col">
             <h4 data-i18n="working_hours">${t.working_hours}</h4>
-            <ul class="hours-list">
+            <ul class="hours-list mb-4">
                 <li><span class="day" data-i18n="mon_fri">${t.mon_fri}</span> <span class="time">10:00 - 20:00</span></li>
                 <li><span class="day" data-i18n="sat">${t.sat}</span> <span class="time" data-i18n="sat_hours">${t.sat_hours}</span></li>
                 <li><span class="day" data-i18n="sun">${t.sun}</span> <span class="time" data-i18n="closed">${t.closed}</span></li>
             </ul>
+
+            <h4 data-i18n="service_areas_title">${t.service_areas_title}</h4>
+            <p class="service-areas-list" data-i18n="service_areas_list" style="font-size: 0.9rem; color: var(--clr-mid-gray); line-height: 1.4;">${t.service_areas_list}</p>
+        </div>
+
+        <div class="footer-col">
+            <h4 data-i18n="credentials_title">${t.credentials_title}</h4>
+            <ul class="credentials-list" style="font-size: 0.85rem; color: var(--clr-mid-gray); line-height: 1.6; padding-left: 1.2rem;">
+                <li class="mb-2">
+                    <span data-i18n="medical_director_title">${t.medical_director_title}</span><br>
+                    <a href="https://www.linkedin.com/in/angelo-moshopoulos-a93476403/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">Dr. Angelo Moshopoulos</a>
+                </li>
+                <li class="mb-2">
+                    <a href="https://www.doctoranytime.gr/d/Odontiatros/moshopoulos-aggelos" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">Doctoranytime Profile</a>
+                </li>
+                <li class="mb-2">
+                    <a href="https://www.osp.gr/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;" data-i18n="affiliation_text">${t.affiliation_text}</a>
+                </li>
+                <li>
+                    <span data-i18n="afm_text">${t.afm_text}</span>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="footer-bottom text-center">
-        <p class="mb-2" style="font-size: 0.85rem; color: var(--clr-mid-gray);">
-            <span data-i18n="afm_text">${t.afm_text}</span> | 
-            <a href="https://www.osp.gr/" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;" data-i18n="affiliation_text">${t.affiliation_text}</a>
-        </p>
         <p>&copy; <span id="year"></span> <a href="https://dentplant.gr" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none; cursor: inherit; pointer-events: auto;">A Dentplant Clinic</a>. <span data-i18n="rights">${t.rights}</span> | <a href="${localizeHref('privacy.html')}" style="color: inherit; text-decoration: underline;" data-i18n="privacy_policy">${t.privacy_policy}</a></p>
     </div>`;
 }
