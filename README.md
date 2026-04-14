@@ -1,4 +1,4 @@
-# i-smile | Cosmetic Dentistry Boutique
+# i-smile | Cosmetic Dentistry Clinic
 
 Professional, SEO-optimized destination website for **i-smile Cosmetic Dentistry**, located in Palaio Faliro, Athens. This project is a high-performance web application designed to showcase premium dental services (Teeth Whitening, Porcelain Veneers, and Clear Aligners) for local, regional, and international patients.
 
