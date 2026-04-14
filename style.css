@@ -522,7 +522,7 @@ ul {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('assets/images/cta-bg.png');
+    background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('assets/images/cta-bg.webp');
     background-size: cover;
     background-position: center;
     z-index: -1;
@@ -1051,7 +1051,7 @@ ul {
 .cta-bg-image {
     position: absolute;
     inset: -80px;
-    background: url('assets/images/cta-bg.png') center/cover no-repeat;
+    background: url('assets/images/cta-bg.webp') center/cover no-repeat;
     z-index: 0;
     will-change: transform;
 }

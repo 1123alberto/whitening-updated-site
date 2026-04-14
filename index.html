@@ -18,7 +18,7 @@
     <meta property="og:site_name" content="i-smile">
     <meta property="og:title" content="Αισθητική Οδοντιατρική Παλαιό Φάληρο | i-smile">
     <meta property="og:description" content="Εξειδικευμένες υπηρεσίες αισθητικής οδοντιατρικής — λεύκανση, όψεις πορσελάνης και διάφανοι νάρθηκες — στο Παλαιό Φάληρο.">
-    <meta property="og:image" content="https://i-smile.gr/assets/images/hero-smile.jpg">
+    <meta property="og:image" content="https://i-smile.gr/assets/images/hero-smile.webp">
     <meta property="og:url" content="https://i-smile.gr/index.html">
     <meta property="og:type" content="website">
 
@@ -26,7 +26,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Αισθητική Οδοντιατρική Παλαιό Φάληρο | i-smile">
     <meta name="twitter:description" content="Κορυφαίες υπηρεσίες αισθητικής οδοντιατρικής στο Παλαιό Φάληρο. Λεύκανση, Όψεις, Aligners.">
-    <meta name="twitter:image" content="https://i-smile.gr/assets/images/hero-smile.jpg">
+    <meta name="twitter:image" content="https://i-smile.gr/assets/images/hero-smile.webp">
 
     <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,7 +42,7 @@
       "@context": "https://schema.org",
       "@type": "Dentist",
       "name": "i-smile | Άγγελος Μοσχόπουλος",
-      "image": "https://i-smile.gr/assets/images/hero-smile.jpg",
+      "image": "https://i-smile.gr/assets/images/hero-smile.webp",
       "@id": "https://i-smile.gr/#dentist",
       "url": "https://i-smile.gr",
       "telephone": "+302109312651",
@@ -58,23 +58,10 @@
         "latitude": 37.9308807,
         "longitude": 23.7035164
       },
-      "areaServed": [
-        { "@type": "City", "name": "Palaio Faliro" },
-        { "@type": "City", "name": "Alimos" },
-        { "@type": "City", "name": "Nea Smiyrni" },
-        { "@type": "City", "name": "Kallithea" }
-      ],
-      "hasMap": "https://www.google.com/maps?cid=4800041113098547085",
       "openingHoursSpecification": [
         {
           "@type": "OpeningHoursSpecification",
-          "dayOfWeek": [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday"
-          ],
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
           "opens": "10:00",
           "closes": "20:00"
         }
@@ -86,6 +73,41 @@
         "https://www.linkedin.com/in/angelo-moshopoulos-a93476403/",
         "https://www.doctoranytime.gr/d/Odontiatros/moshopoulos-aggelos"
       ],
+      "parentOrganization": {
+        "@type": "MedicalOrganization",
+        "name": "Dentplant Clinic",
+        "url": "https://dentplant.gr"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Cosmetic Dental Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Teeth Whitening (Λεύκανση Δοντιών)",
+              "url": "https://i-smile.gr/whitening.html"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Porcelain Veneers (Όψεις Πορσελάνης)",
+              "url": "https://i-smile.gr/veneers.html"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Clear Aligners (Διάφανοι Νάρθηκες)",
+              "url": "https://i-smile.gr/aligners.html"
+            }
+          }
+        ]
+      },
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "5",
@@ -138,7 +160,7 @@
                     </div>
                 </div>
                 <div class="hero-image-wrapper reveal delay-1">
-                    <img src="assets/images/hero-smile.jpg" alt="Εντυπωσιακό, υγιές χαμόγελο στο i-smile Παλαιό Φάληρο" class="hero-image" width="2500" height="1546" loading="eager">
+                    <img src="assets/images/hero-smile.webp" alt="Εντυπωσιακό, υγιές χαμόγελο στο i-smile Παλαιό Φάληρο" class="hero-image" width="2500" height="1546" loading="eager">
                 </div>
             </div>
         </section>
@@ -156,7 +178,7 @@
                     <!-- Whitening Card -->
                     <a href="whitening.html" class="service-card reveal">
                         <div class="service-card-image">
-                            <img src="assets/images/whitening-hero.png" alt="Λεύκανση Δοντιών με LED στο i-smile" width="1024" height="1024" loading="lazy">
+                            <img src="assets/images/whitening-hero.webp" alt="Λεύκανση Δοντιών με LED στο i-smile" width="1024" height="1024" loading="lazy">
                         </div>
                         <div class="service-card-body">
                             <div class="service-card-icon">
@@ -190,7 +212,7 @@
                     <!-- Veneers Card -->
                     <a href="veneers.html" class="service-card reveal delay-1">
                         <div class="service-card-image">
-                            <img src="assets/images/veneers-hero.png" alt="Όψεις Πορσελάνης για τέλειο χαμόγελο" width="1024" height="1024" loading="lazy">
+                            <img src="assets/images/veneers-hero.webp" alt="Όψεις Πορσελάνης για τέλειο χαμόγελο" width="1024" height="1024" loading="lazy">
                         </div>
                         <div class="service-card-body">
                             <div class="service-card-icon">
@@ -218,7 +240,7 @@
                     <!-- Aligners Card -->
                     <a href="aligners.html" class="service-card reveal delay-2">
                         <div class="service-card-image">
-                            <img src="assets/images/aligners-hero.png" alt="Αόρατη ορθοδοντική με διάφανους νάρθηκες" width="1024" height="1024" loading="lazy">
+                            <img src="assets/images/aligners-hero.webp" alt="Αόρατη ορθοδοντική με διάφανους νάρθηκες" width="1024" height="1024" loading="lazy">
                         </div>
                         <div class="service-card-body">
                             <div class="service-card-icon">
@@ -251,7 +273,7 @@
                 <div class="dentist-grid">
                     <div class="dentist-image">
                         <div class="placeholder-img">
-                            <img src="assets/images/dr-moshopoulos.jpg" alt="Dr. Angelo Moshopoulos - i-smile" loading="lazy">
+                            <img src="assets/images/dr-moshopoulos.webp" alt="Dr. Angelo Moshopoulos - i-smile" loading="lazy">
                         </div>
                     </div>
                     <div class="dentist-content">
