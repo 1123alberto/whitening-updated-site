@@ -38,9 +38,8 @@ function getHeaderHTML() {
 
     return `
     <div class="container d-flex align-center justify-between">
-        <a href="${localizeHref('index.html')}" class="text-logo">
-            <span class="logo-cursive">i<span class="logo-hyphen">-</span>smile</span>
-            <span class="logo-subtitle">COSMETIC DENTISTRY</span>
+        <a href="${localizeHref('index.html')}" class="site-logo">
+            <img src="assets/images/logo-new.png" alt="i-smile logo" class="logo-image">
         </a>
 
         <nav class="nav-links">
@@ -67,9 +66,8 @@ function getFooterHTML() {
     return `
     <div class="footer-grid container">
         <div class="footer-col brand-col text-center">
-            <a href="${localizeHref('index.html')}" class="text-logo footer-logo mb-3" style="margin-inline: auto;">
-                <span class="logo-cursive">i<span class="logo-hyphen">-</span>smile</span>
-                <span class="logo-subtitle">COSMETIC DENTISTRY</span>
+            <a href="${localizeHref('index.html')}" class="site-logo footer-logo" style="margin-inline: auto;">
+                <img src="assets/images/logo-new.png" alt="i-smile logo" class="logo-image">
             </a>
             <p class="footer-about" data-i18n="footer_about" style="margin-inline: auto;">${t.footer_about}</p>
         </div>
