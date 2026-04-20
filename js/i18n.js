@@ -162,6 +162,14 @@ const translations = {
         al_cta_title: "Ξεκινήστε τη θεραπεία σας σήμερα",
         al_cta_desc: "Κλείστε μια δωρεάν αξιολόγηση και μάθετε αν οι διάφανοι νάρθηκες είναι η λύση για εσάς.",
 
+        // ── Aligners Showcase ──
+        al_showcase_title: "Πραγματικά Αποτελέσματα",
+        al_showcase_desc: "Δείτε πώς οι διάφανοι νάρθηκες άλλαξαν τα χαμόγελα των ασθενών μας, προσφέροντας ένα ίσιο και υγιές αποτέλεσμα.",
+        al_case1_title: "Διόρθωση Συνωστισμού",
+        al_case2_title: "Κλείσιμο Διαστημάτων",
+        al_label_before: "Πριν",
+        al_label_after: "Μετά",
+
         // ── Booking Page ──
         book_page_title: "Κλείστε το Ραντεβού σας",
         book_page_desc: "Επιλέξτε υπηρεσία, ημερομηνία και ώρα για τη συνεδρία σας.",
@@ -548,6 +556,14 @@ const translations = {
 
         al_cta_title: "Start your treatment today",
         al_cta_desc: "Book a free assessment and find out if clear aligners are the right solution for you.",
+
+        // ── Aligners Showcase ──
+        al_showcase_title: "Real Transformations",
+        al_showcase_desc: "See how clear aligners transformed our patients' smiles, providing a straight and healthy result.",
+        al_case1_title: "Crowding Correction",
+        al_case2_title: "Gap Closure",
+        al_label_before: "Before",
+        al_label_after: "After",
 
         // ── Booking Page ──
         book_page_title: "Book Your Appointment",

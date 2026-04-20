@@ -320,7 +320,63 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+
+    // ── Initialize Before/After Sliders ──
+    initBASliders();
 });
+
+// ── Before/After Slider Logic ──
+function initBASliders() {
+    const sliders = document.querySelectorAll('.ba-slider');
+    
+    sliders.forEach(slider => {
+        const overlay = slider.querySelector('.ba-overlay');
+        const handle = slider.querySelector('.ba-handle');
+        
+        let isDragging = false;
+
+        const updateSlider = (e) => {
+            if (!isDragging && e.type !== 'mousemove' && e.type !== 'touchmove') return;
+            
+            const rect = slider.getBoundingClientRect();
+            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+            let percent = (x / rect.width) * 100;
+            
+            if (percent < 0) percent = 0;
+            if (percent > 100) percent = 100;
+            
+            overlay.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+            handle.style.left = `${percent}%`;
+        };
+
+        const startDragging = () => isDragging = true;
+        const stopDragging = () => isDragging = false;
+
+        // Interaction events
+        slider.addEventListener('mousedown', startDragging);
+        slider.addEventListener('touchstart', startDragging);
+        window.addEventListener('mouseup', stopDragging);
+        window.addEventListener('touchend', stopDragging);
+        
+        slider.addEventListener('mousemove', (e) => {
+            if (isDragging) updateSlider(e);
+        });
+        slider.addEventListener('touchmove', (e) => {
+            if (isDragging) updateSlider(e);
+        });
+
+        // Click to jump
+        slider.addEventListener('click', (e) => {
+            isDragging = true;
+            updateSlider(e);
+            isDragging = false;
+        });
+
+        // Initialize at 50%
+        overlay.style.clipPath = 'inset(0 50% 0 0)';
+        handle.style.left = '50%';
+    });
+}
 
 // ── Expose for booking.js ──
 window.currentLang = currentLang;
