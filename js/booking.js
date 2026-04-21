@@ -27,6 +27,22 @@ const services = [
     { key: 'aligners', duration: 60, i18nKey: 'service_aligners_consult' },
 ];
 
+// ── Eager Warm-up ──
+// Fire a lightweight request to Google Apps Script immediately on script load.
+// This wakes GAS from cold-start so that by the time the user picks a date +
+// service, the instance is already warm and responds in ~200ms vs 1-3 seconds.
+(function warmUpGAS() {
+    if (GOOGLE_SCRIPT_URL.includes('YOUR_GOOGLE_APPS_SCRIPT_URL_HERE')) return;
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = String(today.getMonth() + 1).padStart(2, '0');
+    const d = String(today.getDate()).padStart(2, '0');
+    fetch(`${GOOGLE_SCRIPT_URL}?action=getSlots&date=${y}-${m}-${d}&duration=30`, {
+        method: 'GET',
+        redirect: 'follow'
+    }).catch(() => {}); // Silently discard — this is only a warm-up
+})();
+
 // ── Step Navigation ──
 function goToStep(stepNumber) {
     document.querySelectorAll('.booking-step').forEach(el => el.style.display = 'none');
@@ -197,7 +213,10 @@ async function fetchAndShowSlots(date) {
         }
 
         if (availableSlots.length === 0) {
-            slotsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center;">${window.currentLang === 'el' ? 'Δεν υπάρχουν διαθέσιμες ώρες για αυτή την ημερομηνία.' : 'No slots available for this date.'}</p>`;
+            const msgEl = window.currentLang === 'el' 
+                ? 'Δεν υπάρχουν διαθέσιμες ώρες για αυτή την ημερομηνία. Για επείγοντα περιστατικά παρακαλούμε καλέστε στο <a href="tel:2109312651" style="font-weight:bold; text-decoration:underline;">210 931 2651</a>.' 
+                : 'No slots available for this date. For emergencies please call <a href="tel:2109312651" style="font-weight:bold; text-decoration:underline;">210 931 2651</a>.';
+            slotsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; line-height: 1.6;">${msgEl}</p>`;
         } else {
             availableSlots.forEach(time => {
                 const btn = document.createElement('button');
