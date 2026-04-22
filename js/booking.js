@@ -7,17 +7,28 @@
 
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxvNNqsHihbc9SuLPb4r2Tlin8Tne6AQ8rF38ubQd6k9YY6xaopouajXa7Wuf60-iD43Q/exec';
 
+/**
+ * Local Blocking Configuration
+ * dates: Array of YYYY-MM-DD strings to block entire days.
+ * slots: Object with YYYY-MM-DD keys and arrays of HH:MM strings to block specific slots.
+ */
+const BLOCKED_CONFIG = {
+    dates: ['2026-04-10', '2026-04-11', '2026-04-13', '2026-04-14', '2026-05-01'],
+    slots: {} 
+};
+
 let selectedDate = null;
 let selectedTime = null;
 let selectedDuration = 90;
 let selectedServiceLabel = 'Whitening';
-let currentWeekStart = new Date();
+let currentViewDate = new Date();
+let monthlyBusyData = {}; 
+let isFetchingBusyDays = false;
+let prefetchPromise = null;
 
-// Initialize week to current Monday
-currentWeekStart.setHours(0, 0, 0, 0);
-const dayOfWeek = currentWeekStart.getDay();
-const diffToMonday = currentWeekStart.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
-currentWeekStart.setDate(diffToMonday);
+// Initialize to 1st of current month
+currentViewDate.setDate(1);
+currentViewDate.setHours(0, 0, 0, 0);
 
 // Service definitions
 const services = [
@@ -27,20 +38,26 @@ const services = [
     { key: 'aligners', duration: 60, i18nKey: 'service_aligners_consult' },
 ];
 
-// ── Eager Warm-up ──
-// Fire a lightweight request to Google Apps Script immediately on script load.
-// This wakes GAS from cold-start so that by the time the user picks a date +
-// service, the instance is already warm and responds in ~200ms vs 1-3 seconds.
-(function warmUpGAS() {
+// ── Eager Prefetch ──
+// Fires immediately on script load to eliminate GAS cold-start delay.
+(function prefetchCurrentMonth() {
     if (GOOGLE_SCRIPT_URL.includes('YOUR_GOOGLE_APPS_SCRIPT_URL_HERE')) return;
-    const today = new Date();
-    const y = today.getFullYear();
-    const m = String(today.getMonth() + 1).padStart(2, '0');
-    const d = String(today.getDate()).padStart(2, '0');
-    fetch(`${GOOGLE_SCRIPT_URL}?action=getSlots&date=${y}-${m}-${d}&duration=30`, {
-        method: 'GET',
-        redirect: 'follow'
-    }).catch(() => {}); // Silently discard — this is only a warm-up
+    const year = currentViewDate.getFullYear();
+    const month = currentViewDate.getMonth() + 1;
+    const key = `${year}-${month}`;
+    isFetchingBusyDays = true;
+    prefetchPromise = fetch(`${GOOGLE_SCRIPT_URL}?action=getBusyDays&year=${year}&month=${month}`)
+        .then(r => r.json())
+        .then(data => {
+            monthlyBusyData[key] = data.busyDays || [];
+            // Silently update if calendar is already visible
+            if (document.getElementById('calendar-grid')) renderCalendar();
+        })
+        .catch(() => { monthlyBusyData[key] = []; })
+        .finally(() => { 
+            isFetchingBusyDays = false;
+            prefetchPromise = null; 
+        });
 })();
 
 // ── Step Navigation ──
@@ -53,14 +70,6 @@ function goToStep(stepNumber) {
     const stepEl = document.getElementById(stepId);
     if (stepEl) {
         stepEl.style.display = 'block';
-
-        /* 
-        // Scroll to booking widget for better UX (Disabled for Hero layout)
-        const bookingWidget = document.querySelector('.booking-widget');
-        if (bookingWidget && stepNumber !== 1) {
-            bookingWidget.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-        */
     }
 
     if (stepNumber === 1) {
@@ -69,6 +78,32 @@ function goToStep(stepNumber) {
 }
 window.goToStep = goToStep;
 
+// ── Adaptive Month Loading ──
+async function fetchMonthlyBusyDays(year, month) {
+    if (GOOGLE_SCRIPT_URL.includes("YOUR_GOOGLE_APPS_SCRIPT_URL_HERE")) return;
+    const key = `${year}-${month}`;
+
+    // If a prefetch for this specific month is already running, wait for it
+    if (prefetchPromise && !monthlyBusyData.hasOwnProperty(key)) {
+        await prefetchPromise;
+        return;
+    }
+
+    if (isFetchingBusyDays) return;
+    isFetchingBusyDays = true;
+
+    try {
+        const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getBusyDays&year=${year}&month=${month}`);
+        const data = await response.json();
+        monthlyBusyData[key] = data.busyDays || [];
+        renderCalendar();
+    } catch (e) {
+        monthlyBusyData[key] = [];
+    } finally {
+        isFetchingBusyDays = false;
+    }
+}
+
 // ── Calendar Rendering ──
 function renderCalendar() {
     const grid = document.getElementById('calendar-grid');
@@ -76,6 +111,16 @@ function renderCalendar() {
     if (!grid || !monthLabel) return;
     grid.innerHTML = '';
 
+    const year = currentViewDate.getFullYear();
+    const month = currentViewDate.getMonth() + 1;
+    const key = `${year}-${month}`;
+
+    if (!monthlyBusyData.hasOwnProperty(key)) {
+        fetchMonthlyBusyDays(year, month);
+    }
+    const busyDays = monthlyBusyData[key] || [];
+
+    // Weekday headers
     const daysEl = ['Δευ', 'Τρι', 'Τετ', 'Πεμ', 'Παρ', 'Σαβ', 'Κυρ'];
     const daysEn = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const activeDays = window.currentLang === 'el' ? daysEl : daysEn;
@@ -90,28 +135,31 @@ function renderCalendar() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    let monthName = "";
+    // Calculate Grid Start (Monday of the first week)
+    const gridStart = new Date(currentViewDate);
+    const dayOfWeek = gridStart.getDay();
+    const padding = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    gridStart.setDate(gridStart.getDate() - padding);
 
+    // Month Label
+    monthLabel.textContent = currentViewDate.toLocaleString(document.documentElement.lang, { month: 'long', year: 'numeric' });
+
+    // Generate 35 days (5 weeks)
     for (let i = 0; i < 35; i++) {
-        const date = new Date(currentWeekStart);
+        const date = new Date(gridStart);
         date.setDate(date.getDate() + i);
-
-        if (i % 7 === 0) {
-            const m = date.toLocaleString(document.documentElement.lang, { month: 'long', year: 'numeric' });
-            if (!monthName.includes(m)) monthName += (monthName ? " - " : "") + m;
-        }
 
         const btn = document.createElement('button');
         btn.className = 'date-btn';
         btn.textContent = date.getDate();
 
-        const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, '0');
-        const d = String(date.getDate()).padStart(2, '0');
-        const dateStr = `${y}-${m}-${d}`;
-        const blockedDates = ['2026-04-10', '2026-04-11', '2026-04-13', '2026-04-14', '2026-05-01'];
+        const dateStr = formatDateAPI(date);
+        const isPast = date < today;
+        const isCurrentMonth = date.getMonth() === currentViewDate.getMonth();
+        const isSunday = date.getDay() === 0;
+        const isBlocked = BLOCKED_CONFIG.dates.includes(dateStr) || busyDays.includes(dateStr);
 
-        if (date < today || date.getDay() === 0 || blockedDates.includes(dateStr)) {
+        if (isPast || isSunday || isBlocked || !isCurrentMonth) {
             btn.classList.add('disabled');
         } else {
             btn.onclick = () => selectDate(date);
@@ -123,7 +171,22 @@ function renderCalendar() {
 
         grid.appendChild(btn);
     }
-    monthLabel.textContent = monthName;
+
+    // Nav button states
+    const prevBtn = document.getElementById('prev-week');
+    const nextBtn = document.getElementById('next-week');
+    if (prevBtn && nextBtn) {
+        const currentMonthFirst = new Date(today);
+        currentMonthFirst.setDate(1);
+        currentMonthFirst.setHours(0, 0, 0, 0);
+        prevBtn.disabled = currentViewDate <= currentMonthFirst;
+        prevBtn.style.opacity = prevBtn.disabled ? "0.3" : "1";
+
+        const nextMonthLimit = new Date(currentMonthFirst);
+        nextMonthLimit.setMonth(nextMonthLimit.getMonth() + 1);
+        nextBtn.disabled = currentViewDate >= nextMonthLimit;
+        nextBtn.style.opacity = nextBtn.disabled ? "0.3" : "1";
+    }
 }
 
 // ── Date Selection ──
@@ -210,6 +273,12 @@ async function fetchAndShowSlots(date) {
                 console.error("Non-JSON response from Google Apps Script.", text.substring(0, 500));
                 throw new Error("Invalid response format from server.");
             }
+        }
+
+        // Filter against local blocked slots
+        const dateStr = formatDateAPI(date);
+        if (BLOCKED_CONFIG.slots[dateStr]) {
+            availableSlots = availableSlots.filter(s => !BLOCKED_CONFIG.slots[dateStr].includes(s));
         }
 
         if (availableSlots.length === 0) {
@@ -300,24 +369,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (prevBtn) {
         prevBtn.onclick = () => {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const minStart = new Date(today);
-            minStart.setDate(today.getDate() - 7);
-
-            currentWeekStart.setDate(currentWeekStart.getDate() - 28);
-            if (currentWeekStart < minStart) {
-                const d = today.getDay();
-                const diff = today.getDate() - d + (d === 0 ? -6 : 1);
-                currentWeekStart.setDate(diff);
-            }
+            currentViewDate.setMonth(currentViewDate.getMonth() - 1);
             renderCalendar();
         };
     }
 
     if (nextBtn) {
         nextBtn.onclick = () => {
-            currentWeekStart.setDate(currentWeekStart.getDate() + 28);
+            currentViewDate.setMonth(currentViewDate.getMonth() + 1);
             renderCalendar();
         };
     }
