@@ -176,9 +176,8 @@ const translations = {
 
         select_service: "Επιλέξτε Υπηρεσία",
         service_whitening: "Λεύκανση Δοντιών",
-        service_veneers_consult: "Συμβουλευτική για Όψεις",
-        service_aligners_consult: "Συμβουλευτική για Νάρθηκες",
-        service_consult: "Γενική Αισθητική Αξιολόγηση",
+        service_smile_design: "Σχεδιασμός Χαμόγελου",
+        service_dental_assessment: "Οδοντιατρική Εκτίμηση",
         mins: "λεπτά",
 
         back_to_calendar: "Επιστροφή στο Ημερολόγιο",
@@ -571,9 +570,8 @@ const translations = {
 
         select_service: "Select Service",
         service_whitening: "Teeth Whitening",
-        service_veneers_consult: "Veneers Consultation",
-        service_aligners_consult: "Aligners Consultation",
-        service_consult: "General Aesthetic Consultation",
+        service_smile_design: "Smile Design",
+        service_dental_assessment: "Dental Assessment",
         mins: "mins",
 
         back_to_calendar: "Back to Calendar",

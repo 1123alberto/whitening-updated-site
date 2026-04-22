@@ -32,10 +32,9 @@ currentViewDate.setHours(0, 0, 0, 0);
 
 // Service definitions
 const services = [
-    { key: 'consult', duration: 30, i18nKey: 'service_consult' },
     { key: 'whitening', duration: 90, i18nKey: 'service_whitening' },
-    { key: 'veneers', duration: 60, i18nKey: 'service_veneers_consult' },
-    { key: 'aligners', duration: 60, i18nKey: 'service_aligners_consult' },
+    { key: 'smile_design', duration: 60, i18nKey: 'service_smile_design' },
+    { key: 'dental_assessment', duration: 60, i18nKey: 'service_dental_assessment' },
 ];
 
 // ── Eager Prefetch ──
