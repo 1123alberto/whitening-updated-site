@@ -1,0 +1,44 @@
+# ====================================================================
+# i-smile.gr -> dentplant.gr 301 Redirects
+# Purpose: Maintain SEO value and redirect legacy i-smile traffic 
+# to the corresponding treatment pages on the new Dentplant site.
+# ====================================================================
+
+# Enable Rewrite Engine
+RewriteEngine On
+RewriteBase /
+
+# 1. SPECIFIC TREATMENT MAPPING (High Priority for SEO)
+# --------------------------------------------------------------------
+
+# Teeth Whitening -> Aesthetics page
+RewriteRule ^whitening\.html$ https://www.dentplant.gr/aesthetics.html [R=301,NC,L]
+
+# Porcelain Veneers -> Aesthetics page
+RewriteRule ^veneers\.html$ https://www.dentplant.gr/aesthetics.html [R=301,NC,L]
+
+# Clear Aligners -> Dedicated Aligners page
+RewriteRule ^aligners\.html$ https://www.dentplant.gr/clear-aligners.html [R=301,NC,L]
+
+
+# 2. FUNCTIONAL PAGES MAPPING
+# --------------------------------------------------------------------
+
+# Booking and Appointment Management -> Booking page
+RewriteRule ^book\.html$ https://www.dentplant.gr/booking.html [R=301,NC,L]
+RewriteRule ^manage\.html$ https://www.dentplant.gr/booking.html [R=301,NC,L]
+
+# Privacy Policy -> Privacy page
+RewriteRule ^privacy\.html$ https://www.dentplant.gr/privacy.html [R=301,NC,L]
+
+
+# 3. ROOT & CATCH-ALL REDIRECT
+# --------------------------------------------------------------------
+
+# Redirect legacy root/home explicitly
+RewriteRule ^index\.html$ https://www.dentplant.gr/index.html [R=301,NC,L]
+
+# Global catch-all: Redirect everything else from i-smile.gr to dentplant.gr home
+# This ensures even images/old assets lead back to the new site.
+RewriteCond %{HTTP_HOST} ^(www\.)?i-smile\.gr$ [NC]
+RewriteRule ^(.*)$ https://www.dentplant.gr/index.html [R=301,L]
